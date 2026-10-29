@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { crearApp } from '../src/crear-app.js'
-import { crearRepositorioMemoria } from './repositorio-memoria.js'
+import { CLAVE_PRUEBA, crearRepositorioMemoria } from './repositorio-memoria.js'
 
-const app = crearApp(crearRepositorioMemoria())
+const app = crearApp(crearRepositorioMemoria(), { claveInterna: CLAVE_PRUEBA })
 
 describe('GET /salud', () => {
   it('responde que el servicio está activo', async () => {

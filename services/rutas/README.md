@@ -11,7 +11,7 @@ cp services/rutas/.env.example services/rutas/.env
 npm run dev:rutas
 ```
 
-En `.env` hay que poner la `DATABASE_URL` del proyecto de Supabase. El servicio queda en `http://localhost:3001`.
+En `.env` hay que poner la `DATABASE_URL` del proyecto de Supabase y una `CLAVE_INTERNA` (`openssl rand -hex 32`). El servicio queda en `http://localhost:3001`.
 
 ## Endpoints
 
@@ -21,8 +21,30 @@ En `.env` hay que poner la `DATABASE_URL` del proyecto de Supabase. El servicio 
 | GET | `/rutas` | Rutas activas con sus paradas en orden |
 | GET | `/viajes?fecha=AAAA-MM-DD` | Viajes del día con cupos disponibles. Sin `fecha`, usa el día de hoy en Colombia |
 | GET | `/viajes/{id}` | Detalle de un viaje, con las paradas de su ruta |
+| POST | `/viajes/{id}/ocupar` | **Interno.** Ocupa un cupo. Responde 409 si el bus está lleno |
+| POST | `/viajes/{id}/liberar` | **Interno.** Devuelve un cupo. Responde 409 si no hay cupos ocupados |
 
-Los errores siempre responden `{ "error": "mensaje" }`: 400 si la solicitud es inválida, 404 si el recurso no existe.
+Los errores siempre responden `{ "error": "mensaje" }`: 400 si la solicitud es inválida, 401 si falta la clave interna, 404 si el recurso no existe y 409 si no se pudo mover el cupo.
+
+### Endpoints internos
+
+`ocupar` y `liberar` solo los llama el Servicio de Reservas. Exigen el encabezado `Authorization: Bearer <CLAVE_INTERNA>`; sin él cualquiera podría llenar un bus. Responden los cupos actualizados:
+
+```json
+{ "id": 3, "ocupados": 1, "disponibles": 2 }
+```
+
+Ocupar es un solo `UPDATE ... WHERE ocupados < capacidad`. Si dos solicitudes compiten por el último cupo, Postgres las ordena con el candado de la fila y la segunda no encuentra cupo, así que nunca se sobrevende.
+
+### Prueba de concurrencia
+
+Con el servicio corriendo, lanza muchas solicitudes de ocupar al mismo tiempo sobre un viaje y al final libera lo que ocupó:
+
+```bash
+npm run prueba:concurrencia -w @rutau/rutas -- <viajeId> 20
+```
+
+Con el bus `UFP-103` (3 cupos) el resultado esperado es 3 respuestas 200 y 17 respuestas 409.
 
 Ejemplo de viaje:
 
@@ -46,8 +68,11 @@ src/
   crear-app.ts             App de Hono: middlewares, endpoints y manejo de errores
   modelo.ts                Tipos y la interfaz RepositorioRutas
   repositorio-postgres.ts  Consultas al esquema rutas de Supabase
+  clave-interna.ts         Middleware que protege los endpoints internos
+  validacion.ts            Validaciones compartidas
   local.ts                 Servidor Node para desarrollo local
   endpoints/               Un archivo por grupo de endpoints
+scripts/                   Prueba de concurrencia contra el servicio corriendo
 test/                      Pruebas con Vitest y un repositorio en memoria
 ```
 

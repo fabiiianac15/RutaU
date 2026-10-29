@@ -7,7 +7,12 @@ import { salud } from './endpoints/salud.js'
 import { endpointsRutas } from './endpoints/rutas.js'
 import { endpointsViajes } from './endpoints/viajes.js'
 
-export function crearApp(repo: RepositorioRutas) {
+export interface OpcionesApp {
+  // Clave que deben enviar los servicios internos para ocupar o liberar cupos.
+  claveInterna: string
+}
+
+export function crearApp(repo: RepositorioRutas, { claveInterna }: OpcionesApp) {
   const app = new Hono()
 
   const origenes = (process.env.ORIGENES_PERMITIDOS ?? '*').split(',').map((o) => o.trim())
@@ -17,7 +22,7 @@ export function crearApp(repo: RepositorioRutas) {
 
   app.route('/salud', salud)
   app.route('/rutas', endpointsRutas(repo))
-  app.route('/viajes', endpointsViajes(repo))
+  app.route('/viajes', endpointsViajes(repo, claveInterna))
 
   app.notFound((c) => c.json({ error: 'Recurso no encontrado' }, 404))
 

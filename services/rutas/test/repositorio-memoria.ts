@@ -1,4 +1,6 @@
-import type { RepositorioRutas, Ruta, ViajeDetalle } from '../src/modelo.js'
+import type { RepositorioRutas, ResultadoCupo, Ruta, ViajeDetalle } from '../src/modelo.js'
+
+export const CLAVE_PRUEBA = 'clave-de-prueba'
 
 export const rutaCentro: Ruta = {
   id: 1,
@@ -21,9 +23,22 @@ export const viajeManana: ViajeDetalle = {
   paradas: rutaCentro.paradas,
 }
 
-export function crearRepositorioMemoria(): RepositorioRutas {
+// Cada repositorio tiene su propia copia de los viajes, así una prueba que ocupa cupos no afecta a otra.
+export function crearRepositorioMemoria(viajesIniciales: ViajeDetalle[] = [viajeManana]): RepositorioRutas {
   const rutas = [rutaCentro]
-  const viajes = [viajeManana]
+  const viajes = structuredClone(viajesIniciales)
+
+  const moverCupo = (viajeId: number, delta: 1 | -1): ResultadoCupo => {
+    const viaje = viajes.find((v) => v.id === viajeId)
+    if (!viaje) return { estado: 'no-existe' }
+
+    const ocupados = viaje.ocupados + delta
+    if (ocupados < 0 || ocupados > viaje.bus.capacidad) return { estado: 'sin-cambio' }
+
+    viaje.ocupados = ocupados
+    viaje.disponibles = viaje.bus.capacidad - ocupados
+    return { estado: 'ok', cupos: { id: viaje.id, ocupados, disponibles: viaje.disponibles } }
+  }
 
   return {
     async listarRutas() {
@@ -34,6 +49,12 @@ export function crearRepositorioMemoria(): RepositorioRutas {
     },
     async obtenerViaje(id) {
       return viajes.find((v) => v.id === id) ?? null
+    },
+    async ocuparCupo(viajeId) {
+      return moverCupo(viajeId, 1)
+    },
+    async liberarCupo(viajeId) {
+      return moverCupo(viajeId, -1)
     },
   }
 }

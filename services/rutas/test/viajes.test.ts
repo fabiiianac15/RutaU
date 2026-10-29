@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { crearApp } from '../src/crear-app.js'
-import { crearRepositorioMemoria, rutaCentro, viajeManana } from './repositorio-memoria.js'
+import { CLAVE_PRUEBA, crearRepositorioMemoria, rutaCentro, viajeManana } from './repositorio-memoria.js'
 
-const app = crearApp(crearRepositorioMemoria())
+const app = crearApp(crearRepositorioMemoria(), { claveInterna: CLAVE_PRUEBA })
 
 describe('GET /rutas', () => {
   it('lista las rutas con sus paradas', async () => {

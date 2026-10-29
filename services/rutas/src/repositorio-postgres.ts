@@ -1,5 +1,5 @@
 import postgres from 'postgres'
-import type { RepositorioRutas, Ruta, Viaje, ViajeDetalle } from './modelo.js'
+import type { Cupos, RepositorioRutas, ResultadoCupo, Ruta, Viaje, ViajeDetalle } from './modelo.js'
 
 // Los ids son bigint en la base de datos; se convierten a int para que lleguen como números.
 const columnasViaje = (sql: postgres.Sql) => sql`
@@ -21,8 +21,23 @@ const paradasDeRuta = (sql: postgres.Sql) => sql`
 `
 
 export function crearRepositorioPostgres(url: string): RepositorioRutas {
-  // prepare: false es obligatorio con el Transaction pooler de Supabase.
-  const sql = postgres(url, { prepare: false, max: 5 })
+  // Configuración para el Transaction pooler de Supabase:
+  // - prepare: false, porque el pooler no mantiene sentencias preparadas entre transacciones.
+  // - max_pipeline: 1, porque el pooler puede mandar a otra conexión de Postgres las consultas
+  //   que llegan seguidas por el mismo socket. Con varias en vuelo, algunas quedaban a medias
+  //   sosteniendo el candado de la fila y bloqueaban a las demás.
+  const sql = postgres(url, { prepare: false, max: 5, max_pipeline: 1 })
+
+  // El UPDATE con la condición en el WHERE es una sola operación atómica: si dos
+  // solicitudes compiten por el último cupo, Postgres bloquea la fila y la segunda
+  // vuelve a evaluar la condición con el valor ya actualizado, así que no cambia nada.
+  const moverCupo = async (viajeId: number, actualizado: Promise<Cupos[]>): Promise<ResultadoCupo> => {
+    const [cupos] = await actualizado
+    if (cupos) return { estado: 'ok', cupos }
+
+    const [existe] = await sql`select 1 from rutas.viajes where id = ${viajeId}`
+    return existe ? { estado: 'sin-cambio' } : { estado: 'no-existe' }
+  }
 
   return {
     async listarRutas() {
@@ -54,6 +69,26 @@ export function crearRepositorioPostgres(url: string): RepositorioRutas {
         where v.id = ${id}
       `
       return viaje ?? null
+    },
+
+    ocuparCupo(viajeId) {
+      return moverCupo(viajeId, sql<Cupos[]>`
+        update rutas.viajes v
+        set ocupados = v.ocupados + 1
+        from rutas.buses b
+        where v.id = ${viajeId} and b.id = v.bus_id and v.ocupados < b.capacidad
+        returning v.id::int as id, v.ocupados, b.capacidad - v.ocupados as disponibles
+      `)
+    },
+
+    liberarCupo(viajeId) {
+      return moverCupo(viajeId, sql<Cupos[]>`
+        update rutas.viajes v
+        set ocupados = v.ocupados - 1
+        from rutas.buses b
+        where v.id = ${viajeId} and b.id = v.bus_id and v.ocupados > 0
+        returning v.id::int as id, v.ocupados, b.capacidad - v.ocupados as disponibles
+      `)
     },
   }
 }

@@ -2,7 +2,9 @@ import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
-import type { RepositorioRutas } from '../modelo.js'
+import type { RepositorioRutas, ResultadoCupo } from '../modelo.js'
+import { exigirClaveInterna } from '../clave-interna.js'
+import { alFallar, parametroId } from '../validacion.js'
 
 // La fecha por defecto es la de Colombia, no la del servidor (Vercel corre en UTC).
 const hoyEnColombia = () =>
@@ -12,19 +14,15 @@ const consultaViajes = z.object({
   fecha: z.iso.date({ error: 'La fecha debe tener el formato AAAA-MM-DD' }).optional(),
 })
 
-const parametroId = z.object({
-  id: z.coerce.number({ error: 'El id debe ser un número' }).int().positive(),
-})
-
-// Responde 400 con el primer mensaje de validación, en el mismo formato { error } del resto de la API.
-const alFallar = (resultado: { success: boolean; error?: { issues: { message: string }[] } }) => {
-  if (!resultado.success) {
-    throw new HTTPException(400, { message: resultado.error?.issues[0]?.message ?? 'Solicitud inválida' })
-  }
+const responderCupo = (resultado: ResultadoCupo, mensajeSinCambio: string) => {
+  if (resultado.estado === 'no-existe') throw new HTTPException(404, { message: 'El viaje no existe' })
+  if (resultado.estado === 'sin-cambio') throw new HTTPException(409, { message: mensajeSinCambio })
+  return resultado.cupos
 }
 
-export function endpointsViajes(repo: RepositorioRutas) {
+export function endpointsViajes(repo: RepositorioRutas, claveInterna: string) {
   const app = new Hono()
+  const soloServicios = exigirClaveInterna(claveInterna)
 
   app.get('/', zValidator('query', consultaViajes, alFallar), async (c) => {
     const { fecha = hoyEnColombia() } = c.req.valid('query')
@@ -35,6 +33,16 @@ export function endpointsViajes(repo: RepositorioRutas) {
     const viaje = await repo.obtenerViaje(c.req.valid('param').id)
     if (!viaje) throw new HTTPException(404, { message: 'El viaje no existe' })
     return c.json(viaje)
+  })
+
+  app.post('/:id/ocupar', soloServicios, zValidator('param', parametroId, alFallar), async (c) => {
+    const resultado = await repo.ocuparCupo(c.req.valid('param').id)
+    return c.json(responderCupo(resultado, 'El viaje no tiene cupos disponibles'))
+  })
+
+  app.post('/:id/liberar', soloServicios, zValidator('param', parametroId, alFallar), async (c) => {
+    const resultado = await repo.liberarCupo(c.req.valid('param').id)
+    return c.json(responderCupo(resultado, 'El viaje no tiene cupos ocupados'))
   })
 
   return app
