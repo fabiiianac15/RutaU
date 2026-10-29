@@ -9,7 +9,8 @@
   "scripts": {
     "dev:rutas": "npm run dev -w @rutau/rutas",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "test": "npm test --workspaces --if-present"
+    "test": "npm test --workspaces --if-present",
+    "dev:reservas": "npm run dev -w @rutau/reservas"
   },
   "engines": {
     "node": ">=22"
