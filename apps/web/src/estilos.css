@@ -1,0 +1,125 @@
+@import '@fontsource-variable/atkinson-hyperlegible-next';
+@import 'tailwindcss';
+
+/* Tokens del archivo de Figma «RutaU · El horario de clases» (colección RutaU, modo Claro). */
+@theme {
+  --font-sans: 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif;
+
+  --color-rojo: #c71122;
+  --color-rojo-oscuro: #9e0d1b;
+  --color-rojo-suave: #f6e3e5;
+  --color-rojo-relleno: #ebc0c5;
+  --color-rojo-tinte: #fbeff0;
+  --color-tinta: #202124;
+  --color-tinta-2: #3c4043;
+  --color-apagada: #5f6368;
+  --color-papel: #ffffff;
+  --color-sutil: #f1f3f4;
+  --color-rayado: #e8eaed;
+  --color-grilla: #dadce0;
+  --color-exito: #137333;
+  --color-exito-suave: #e6f4ea;
+
+  --radius-bloque: 8px;
+  --radius-control: 10px;
+  --radius-hoja: 16px;
+
+  /* Escala cerrada: la hora es el único tamaño grande. */
+  --text-etiqueta: 0.75rem;
+  --text-etiqueta--line-height: 1rem;
+  --text-hora-bloque: 1.25rem;
+  --text-hora-bloque--line-height: 1.5rem;
+  --text-hora: 2rem;
+  --text-hora--line-height: 2.25rem;
+
+  --ease-salida: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-hoja: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@layer base {
+  html {
+    color: var(--color-tinta);
+    background: var(--color-papel);
+    font-variant-numeric: tabular-nums;
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100dvh;
+    font-family: var(--font-sans);
+    caret-color: var(--color-rojo);
+    accent-color: var(--color-rojo);
+  }
+
+  ::selection {
+    background: var(--color-rojo-relleno);
+    color: var(--color-tinta);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-tinta);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Sobre la banda roja el anillo de foco va en blanco para que se vea. */
+  .sobre-rojo :focus-visible {
+    outline-color: var(--color-papel);
+  }
+
+  * {
+    scrollbar-color: var(--color-grilla) transparent;
+    scrollbar-width: thin;
+  }
+
+  button {
+    cursor: pointer;
+  }
+}
+
+/* Pulsar se siente: todo lo que se toca baja un poco. */
+@utility presionable {
+  transition: transform 160ms var(--ease-salida);
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+}
+
+/* Viaje que ya salió: rayado en vez de solo gris, para no depender del color. */
+@utility rayado {
+  background: repeating-linear-gradient(
+    135deg,
+    var(--color-sutil) 0 6px,
+    var(--color-rayado) 6px 12px
+  );
+}
+
+/* El momento de la app: al reservar, tu bloque se pinta de rojo de abajo hacia arriba,
+   como el relleno de ocupación que termina de llenarse contigo. */
+.pintar {
+  clip-path: inset(0);
+  transition: clip-path 460ms var(--ease-salida);
+  @starting-style {
+    clip-path: inset(100% 0 0 0);
+  }
+}
+
+/* La hoja entra desde abajo una sola vez, al cargar el día. */
+@media (max-width: 1023px) {
+  .hoja {
+    transition: transform 320ms var(--ease-hoja);
+    @starting-style {
+      transform: translateY(100%);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+  }
+}

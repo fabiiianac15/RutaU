@@ -23,6 +23,21 @@ La propuesta completa está en [`docs/propuesta-rutau.docx`](docs/propuesta-ruta
 - Node.js 22 o superior (ver `.nvmrc`)
 - npm 10 o superior
 
+## Desarrollo local
+
+```bash
+npm install
+cp services/rutas/.env.example services/rutas/.env        # poner DATABASE_URL y CLAVE_INTERNA
+cp services/reservas/.env.example services/reservas/.env  # misma DATABASE_URL y CLAVE_INTERNA
+cp apps/web/.env.example apps/web/.env
+
+npm run dev:rutas      # http://localhost:3001
+npm run dev:reservas   # http://localhost:3002
+npm run dev:web        # http://localhost:5173
+```
+
+Cada comando va en su propia terminal. `npm test` corre las pruebas de todo el monorepo.
+
 ## Integrantes
 
 Fabián José Acosta Acosta, Charis Merieth Conrado Cantillo, Joseph Smith Mamian Bayona, Juan Diego Trigos Benavides, Kevin Alejandro Díaz Franco y Héctor Augusto Alfonso Castilla.
