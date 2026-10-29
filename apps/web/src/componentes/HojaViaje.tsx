@@ -31,6 +31,8 @@ export function HojaViaje(props: Props) {
   // Primero se elige la parada; los datos solo se piden si este celular no conoce al estudiante.
   const [paso, setPaso] = useState<'parada' | 'datos'>('parada')
   const lleno = estado === 'lleno' || (resultado?.tipo === 'error' && resultado.sinCupos)
+  // Si solo se conoce el código (se buscó en Mis reservas), igual hay que pedir el nombre.
+  const conocido = estudiante?.nombre ? estudiante : null
 
   const encabezado = (
     <div>
@@ -107,15 +109,15 @@ export function HojaViaje(props: Props) {
           disabled={!paradaId}
           onClick={() => {
             if (!paradaId) return
-            if (estudiante) props.onReservar(paradaId, estudiante)
+            if (conocido) props.onReservar(paradaId, conocido)
             else setPaso('datos')
           }}
         >
           Reservar mi cupo
         </Boton>
-        {estudiante && (
+        {conocido && (
           <p className="text-sm text-apagada">
-            A nombre de {estudiante.nombre} · {estudiante.codigo}.{' '}
+            A nombre de {conocido.nombre} · {conocido.codigo}.{' '}
             <button className="font-semibold text-rojo-oscuro underline underline-offset-3" onClick={() => setPaso('datos')}>
               No soy yo
             </button>

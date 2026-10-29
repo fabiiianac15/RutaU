@@ -1,10 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './estilos.css'
-import { Hoy } from './vistas/Hoy'
+import { App } from './App'
 
 createRoot(document.getElementById('raiz')!).render(
   <StrictMode>
-    <Hoy />
+    <App />
   </StrictMode>,
 )
