@@ -1,0 +1,12 @@
+{
+  "name": "rutau",
+  "private": true,
+  "description": "Reserva de cupos para el transporte universitario de la UFPSO",
+  "workspaces": [
+    "apps/*",
+    "services/*"
+  ],
+  "engines": {
+    "node": ">=22"
+  }
+}

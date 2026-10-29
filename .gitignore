@@ -1,0 +1,34 @@
+# Dependencias
+node_modules/
+
+# Builds
+dist/
+build/
+.vercel/
+*.tsbuildinfo
+
+# Variables de entorno (solo se sube .env.example)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor y sistema
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Herramientas de IA locales
+.claude/
+.agents/
+.codex/
+skills-lock.json
+
+# Pruebas
+coverage/
+playwright-report/
+test-results/
