@@ -32,3 +32,9 @@ skills-lock.json
 coverage/
 playwright-report/
 test-results/
+
+# Impeccable: bocetos y capturas temporales (el contrato y la config sí se suben)
+**/.impeccable/mocks/
+**/.impeccable/review/
+**/.impeccable/build/
+**/.impeccable/config.local.json

@@ -1,0 +1,6 @@
+{
+  "name": "@rutau/web",
+  "private": true,
+  "description": "Frontend web de RutaU",
+  "type": "module"
+}
