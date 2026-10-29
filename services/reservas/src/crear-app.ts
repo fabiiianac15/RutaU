@@ -3,13 +3,18 @@ import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { HTTPException } from 'hono/http-exception'
 import { RutasNoDisponible, type ClienteRutas } from './cliente-rutas.js'
+import type { RepositorioReservas } from './modelo.js'
 import { endpointsSalud } from './endpoints/salud.js'
+import { endpointsReservas } from './endpoints/reservas.js'
 
 export interface Dependencias {
+  repo: RepositorioReservas
   rutas: ClienteRutas
+  // Reloj inyectable para probar viajes que ya salieron.
+  ahora?: () => Date
 }
 
-export function crearApp({ rutas }: Dependencias) {
+export function crearApp({ repo, rutas, ahora = () => new Date() }: Dependencias) {
   const app = new Hono()
 
   const origenes = (process.env.ORIGENES_PERMITIDOS ?? '*').split(',').map((o) => o.trim())
@@ -18,6 +23,7 @@ export function crearApp({ rutas }: Dependencias) {
   app.use(cors({ origin: origenes.includes('*') ? '*' : origenes }))
 
   app.route('/salud', endpointsSalud(rutas))
+  app.route('/reservas', endpointsReservas({ repo, rutas, ahora }))
 
   app.notFound((c) => c.json({ error: 'Recurso no encontrado' }, 404))
 
