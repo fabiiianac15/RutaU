@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import app from '../src/index.js'
+import { crearApp } from '../src/crear-app.js'
+import { crearRepositorioMemoria } from './repositorio-memoria.js'
+
+const app = crearApp(crearRepositorioMemoria())
 
 describe('GET /salud', () => {
   it('responde que el servicio está activo', async () => {
