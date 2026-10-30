@@ -47,13 +47,26 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-          cache: gradle
+
+      # Guarda en caché las librerías de Gradle entre ejecuciones, así casi no se piden a Maven Central.
+      - uses: gradle/actions/setup-gradle@v4
 
       - name: Compilar la APK
         working-directory: apps/web/android
+        # Maven Central a veces responde 429 (demasiadas peticiones) a los servidores de GitHub:
+        # Gradle reintenta cada descarga con más espera y, si igual falla, se reintenta la compilación.
+        env:
+          GRADLE_OPTS: >-
+            -Dorg.gradle.internal.repository.max.retries=8
+            -Dorg.gradle.internal.repository.initial.backoff=2000
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon
+          for intento in 1 2 3; do
+            ./gradlew assembleDebug --no-daemon && break
+            [ "$intento" = 3 ] && exit 1
+            echo "Falló el intento $intento; reintentando en $((intento * 60)) s..."
+            sleep $((intento * 60))
+          done
           cp app/build/outputs/apk/debug/app-debug.apk "$GITHUB_WORKSPACE/RutaU.apk"
 
       - uses: actions/upload-artifact@v4
