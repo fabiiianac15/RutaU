@@ -12,9 +12,8 @@ export interface OpcionesApp {
   claveInterna: string
 }
 
-export function crearApp(repo: RepositorioRutas, { claveInterna }: OpcionesApp) {
-  const app = new Hono()
-
+// La instancia de Hono se puede pasar desde index.ts, que Vercel exige que importe hono.
+export function crearApp(repo: RepositorioRutas, { claveInterna }: OpcionesApp, app = new Hono()) {
   const origenes = (process.env.ORIGENES_PERMITIDOS ?? '*').split(',').map((o) => o.trim())
 
   app.use(logger())

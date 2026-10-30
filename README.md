@@ -23,6 +23,26 @@ La propuesta completa está en [`docs/propuesta-rutau.docx`](docs/propuesta-ruta
 - Node.js 22 o superior (ver `.nvmrc`)
 - npm 10 o superior
 
+## En producción
+
+| | URL |
+|---|---|
+| Web | https://rutau-web.vercel.app |
+| Servicio de Rutas | https://rutau-rutas.vercel.app/salud |
+| Servicio de Reservas | https://rutau-reservas.vercel.app/salud |
+
+Las dos APIs corren en Vercel en la región Portland (`pdx1`), cerca de la base de datos de Supabase en Oregon, y solo aceptan peticiones del navegador (CORS) desde la web.
+
+### Desplegar
+
+Con `npx vercel login` hecho, cada carpeta enlazada (`npx vercel link`) y los secretos `DATABASE_URL` y `CLAVE_INTERNA` cargados en `rutau-rutas` y `rutau-reservas`:
+
+```bash
+bash scripts/desplegar.sh
+```
+
+El script despliega Rutas, luego Reservas con la URL de Rutas, luego la web con las URLs de ambas, y por último limita CORS a la URL de la web.
+
 ## Desarrollo local
 
 ```bash

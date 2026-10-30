@@ -14,9 +14,8 @@ export interface Dependencias {
   ahora?: () => Date
 }
 
-export function crearApp({ repo, rutas, ahora = () => new Date() }: Dependencias) {
-  const app = new Hono()
-
+// La instancia de Hono se puede pasar desde index.ts, que Vercel exige que importe hono.
+export function crearApp({ repo, rutas, ahora = () => new Date() }: Dependencias, app = new Hono()) {
   const origenes = (process.env.ORIGENES_PERMITIDOS ?? '*').split(',').map((o) => o.trim())
 
   app.use(logger())

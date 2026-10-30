@@ -8,7 +8,17 @@
     "skipLibCheck": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
-    "types": ["node"]
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "./node_modules/@types",
+      "../../node_modules/@types"
+    ]
   },
-  "include": ["src", "test", "scripts"]
+  "include": [
+    "src",
+    "test",
+    "scripts"
+  ]
 }
