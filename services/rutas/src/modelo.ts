@@ -2,6 +2,14 @@ export interface Parada {
   id: number
   nombre: string
   orden: number
+  latitud: number | null
+  longitud: number | null
+}
+
+// Recorrido de la ruta por las calles, en GeoJSON: cada punto es [longitud, latitud].
+export interface Trazado {
+  type: 'LineString'
+  coordinates: [number, number][]
 }
 
 export interface Ruta {
@@ -9,6 +17,9 @@ export interface Ruta {
   nombre: string
   descripcion: string | null
   paradas: Parada[]
+  trazado: Trazado | null
+  distanciaM: number | null
+  duracionMin: number | null
 }
 
 export interface Viaje {

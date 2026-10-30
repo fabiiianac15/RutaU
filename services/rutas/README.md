@@ -18,7 +18,7 @@ En `.env` hay que poner la `DATABASE_URL` del proyecto de Supabase y una `CLAVE_
 | Método | Ruta | Descripción |
 |---|---|---|
 | GET | `/salud` | Estado del servicio |
-| GET | `/rutas` | Rutas activas con sus paradas en orden |
+| GET | `/rutas` | Rutas activas con sus paradas en orden, la ubicación de cada parada y el recorrido por las calles (GeoJSON) |
 | GET | `/viajes?fecha=AAAA-MM-DD` | Viajes del día con cupos disponibles. Sin `fecha`, usa el día de hoy en Colombia |
 | GET | `/viajes/{id}` | Detalle de un viaje, con las paradas de su ruta |
 | POST | `/viajes/{id}/ocupar` | **Interno.** Ocupa un cupo. Responde 409 si el bus está lleno |

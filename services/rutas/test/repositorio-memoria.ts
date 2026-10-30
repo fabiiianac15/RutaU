@@ -7,9 +7,12 @@ export const rutaCentro: Ruta = {
   nombre: 'Ruta Centro',
   descripcion: 'Centro de Ocaña hacia la sede El Algodonal',
   paradas: [
-    { id: 1, nombre: 'Parque 29 de Mayo', orden: 1 },
-    { id: 2, nombre: 'Sede El Algodonal', orden: 2 },
+    { id: 1, nombre: 'Parque 29 de Mayo', orden: 1, latitud: 8.235412, longitud: -73.353856 },
+    { id: 2, nombre: 'Sede El Algodonal', orden: 2, latitud: 8.2352, longitud: -73.32209 },
   ],
+  trazado: { type: 'LineString', coordinates: [[-73.35402, 8.23499], [-73.32209, 8.2352]] },
+  distanciaM: 10741,
+  duracionMin: 18,
 }
 
 export const viajeManana: ViajeDetalle = {

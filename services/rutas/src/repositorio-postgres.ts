@@ -14,7 +14,9 @@ const columnasViaje = (sql: postgres.Sql) => sql`
 
 const paradasDeRuta = (sql: postgres.Sql) => sql`
   coalesce(
-    (select json_agg(json_build_object('id', p.id::int, 'nombre', p.nombre, 'orden', p.orden) order by p.orden)
+    (select json_agg(
+       json_build_object('id', p.id::int, 'nombre', p.nombre, 'orden', p.orden, 'latitud', p.latitud, 'longitud', p.longitud)
+       order by p.orden)
      from rutas.paradas p where p.ruta_id = r.id),
     '[]'
   )
@@ -42,7 +44,8 @@ export function crearRepositorioPostgres(url: string): RepositorioRutas {
   return {
     async listarRutas() {
       return sql<Ruta[]>`
-        select r.id::int as id, r.nombre, r.descripcion, ${paradasDeRuta(sql)} as paradas
+        select r.id::int as id, r.nombre, r.descripcion, ${paradasDeRuta(sql)} as paradas,
+               r.trazado, r.distancia_m as "distanciaM", r.duracion_min as "duracionMin"
         from rutas.rutas r
         where r.activa
         order by r.nombre

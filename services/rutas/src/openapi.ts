@@ -37,9 +37,9 @@ const viajeEjemplo = {
 }
 
 const paradasEjemplo = [
-  { id: 1, nombre: 'Parque 29 de Mayo', orden: 1 },
-  { id: 2, nombre: 'Hospital Emiro Quintero Cañizares', orden: 2 },
-  { id: 3, nombre: 'Sede El Algodonal', orden: 3 },
+  { id: 1, nombre: 'Parque 29 de Mayo', orden: 1, latitud: 8.235412, longitud: -73.353856 },
+  { id: 2, nombre: 'Hospital Emiro Quintero Cañizares', orden: 2, latitud: 8.254306, longitud: -73.358398 },
+  { id: 3, nombre: 'Sede El Algodonal', orden: 3, latitud: 8.2352, longitud: -73.32209 },
 ]
 
 export const documentoOpenApi = {
@@ -66,14 +66,24 @@ export const documentoOpenApi = {
       get: {
         tags: ['Rutas'],
         summary: 'Listar rutas',
-        description: 'Rutas activas con sus paradas en orden.',
+        description: 'Rutas activas con sus paradas en orden, la ubicación de cada parada y el recorrido por las calles (GeoJSON), para dibujarlas en un mapa.',
         responses: {
           200: {
             description: 'Rutas activas',
             content: {
               'application/json': {
                 schema: { type: 'array', items: { $ref: '#/components/schemas/Ruta' } },
-                example: [{ id: 1, nombre: 'Ruta Centro', descripcion: 'Centro de Ocaña hacia la sede El Algodonal', paradas: paradasEjemplo }],
+                example: [
+                  {
+                    id: 1,
+                    nombre: 'Ruta Centro',
+                    descripcion: 'Centro de Ocaña hacia la sede El Algodonal',
+                    paradas: paradasEjemplo,
+                    trazado: { type: 'LineString', coordinates: [[-73.35402, 8.23499], [-73.35355, 8.2348], [-73.32209, 8.2352]] },
+                    distanciaM: 10741,
+                    duracionMin: 18,
+                  },
+                ],
               },
             },
           },
@@ -164,16 +174,33 @@ export const documentoOpenApi = {
           id: { type: 'integer' },
           nombre: { type: 'string' },
           orden: { type: 'integer', description: 'Posición de la parada en la ruta, desde 1' },
+          latitud: { type: ['number', 'null'], description: 'Latitud (WGS84), de OpenStreetMap' },
+          longitud: { type: ['number', 'null'], description: 'Longitud (WGS84), de OpenStreetMap' },
         },
       },
       Ruta: {
         type: 'object',
-        required: ['id', 'nombre', 'descripcion', 'paradas'],
+        required: ['id', 'nombre', 'descripcion', 'paradas', 'trazado', 'distanciaM', 'duracionMin'],
         properties: {
           id: { type: 'integer' },
           nombre: { type: 'string' },
           descripcion: { type: ['string', 'null'] },
           paradas: { type: 'array', items: { $ref: '#/components/schemas/Parada' } },
+          trazado: {
+            description: 'Recorrido por las calles como GeoJSON LineString; cada punto es [longitud, latitud]',
+            oneOf: [
+              {
+                type: 'object',
+                properties: {
+                  type: { const: 'LineString' },
+                  coordinates: { type: 'array', items: { type: 'array', items: { type: 'number' }, minItems: 2, maxItems: 2 } },
+                },
+              },
+              { type: 'null' },
+            ],
+          },
+          distanciaM: { type: ['integer', 'null'], description: 'Largo del recorrido en metros' },
+          duracionMin: { type: ['integer', 'null'], description: 'Duración aproximada del recorrido en minutos' },
         },
       },
       Viaje: {
