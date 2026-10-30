@@ -1,6 +1,10 @@
 import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod'
 
+export const consultaViajes = z.object({
+  fecha: z.iso.date({ error: 'La fecha debe tener el formato AAAA-MM-DD' }).optional(),
+})
+
 export const parametroId = z.object({
   id: z.coerce.number({ error: 'El id debe ser un número' }).int().positive(),
 })

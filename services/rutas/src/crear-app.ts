@@ -6,6 +6,8 @@ import type { RepositorioRutas } from './modelo.js'
 import { salud } from './endpoints/salud.js'
 import { endpointsRutas } from './endpoints/rutas.js'
 import { endpointsViajes } from './endpoints/viajes.js'
+import { endpointsDocumentacion } from './documentacion.js'
+import { documentoOpenApi } from './openapi.js'
 
 export interface OpcionesApp {
   // Clave que deben enviar los servicios internos para ocupar o liberar cupos.
@@ -22,6 +24,8 @@ export function crearApp(repo: RepositorioRutas, { claveInterna }: OpcionesApp, 
   app.route('/salud', salud)
   app.route('/rutas', endpointsRutas(repo))
   app.route('/viajes', endpointsViajes(repo, claveInterna))
+  app.route('/docs', endpointsDocumentacion('RutaU · Servicio de Rutas y Viajes', documentoOpenApi))
+  app.get('/', (c) => c.redirect('/docs'))
 
   app.notFound((c) => c.json({ error: 'Recurso no encontrado' }, 404))
 

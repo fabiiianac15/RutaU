@@ -6,6 +6,8 @@ import { RutasNoDisponible, type ClienteRutas } from './cliente-rutas.js'
 import type { RepositorioReservas } from './modelo.js'
 import { endpointsSalud } from './endpoints/salud.js'
 import { endpointsReservas } from './endpoints/reservas.js'
+import { endpointsDocumentacion } from './documentacion.js'
+import { documentoOpenApi } from './openapi.js'
 
 export interface Dependencias {
   repo: RepositorioReservas
@@ -23,6 +25,8 @@ export function crearApp({ repo, rutas, ahora = () => new Date() }: Dependencias
 
   app.route('/salud', endpointsSalud(rutas))
   app.route('/reservas', endpointsReservas({ repo, rutas, ahora }))
+  app.route('/docs', endpointsDocumentacion('RutaU · Servicio de Reservas', documentoOpenApi))
+  app.get('/', (c) => c.redirect('/docs'))
 
   app.notFound((c) => c.json({ error: 'Recurso no encontrado' }, 404))
 

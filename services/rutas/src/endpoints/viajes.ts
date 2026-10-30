@@ -1,18 +1,13 @@
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { zValidator } from '@hono/zod-validator'
-import { z } from 'zod'
 import type { RepositorioRutas, ResultadoCupo } from '../modelo.js'
 import { exigirClaveInterna } from '../clave-interna.js'
-import { alFallar, parametroId } from '../validacion.js'
+import { alFallar, consultaViajes, parametroId } from '../validacion.js'
 
 // La fecha por defecto es la de Colombia, no la del servidor (Vercel corre en UTC).
 const hoyEnColombia = () =>
   new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Bogota' }).format(new Date())
-
-const consultaViajes = z.object({
-  fecha: z.iso.date({ error: 'La fecha debe tener el formato AAAA-MM-DD' }).optional(),
-})
 
 const responderCupo = (resultado: ResultadoCupo, mensajeSinCambio: string) => {
   if (resultado.estado === 'no-existe') throw new HTTPException(404, { message: 'El viaje no existe' })
