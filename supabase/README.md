@@ -22,7 +22,12 @@ PostgreSQL en Supabase, con un esquema por servicio:
 
 1. `migrations/20261029000001_esquema_rutas.sql`
 2. `migrations/20261029000002_esquema_reservas.sql`
-3. `seed.sql` (datos de prueba)
+3. `migrations/20261030000001_mapa_de_rutas.sql` (coordenadas de las paradas y recorrido de cada ruta)
+4. `seed.sql` (datos de prueba, ya con coordenadas y recorridos)
+
+En una base que ya tiene los datos de prueba, basta con ejecutar la migración 3: agrega las columnas y llena las coordenadas y los recorridos.
+
+Las coordenadas vienen de OpenStreetMap (Nominatim) y los recorridos se calcularon con OSRM sobre la red vial de Ocaña.
 
 **Con la CLI de Supabase:**
 
