@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">RutaU</string>
+    <string name="title_activity_main">RutaU</string>
+    <string name="package_name">co.edu.ufpso.rutau</string>
+    <string name="custom_url_scheme">co.edu.ufpso.rutau</string>
+</resources>

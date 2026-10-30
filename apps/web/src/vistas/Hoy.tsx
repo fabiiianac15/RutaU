@@ -8,6 +8,7 @@ import { HojaViaje, type Resultado } from '../componentes/HojaViaje'
 import { estadoDe, filasDelDia } from '../lib/dia'
 import { useAhora, useReservas, useRutas, useViajes } from '../lib/datos'
 import { useEstudiante, type Estudiante } from '../lib/estudiante'
+import { vibrarExito } from '../lib/vibrar'
 import { etiquetaDia, fechaEnColombia, horaEnColombia, minutos, sumarDias } from '../lib/tiempo'
 
 export function Hoy({ accionBanda, onVerReservas }: { accionBanda?: React.ReactNode; onVerReservas?: () => void }) {
@@ -90,6 +91,7 @@ export function Hoy({ accionBanda, onVerReservas }: { accionBanda?: React.ReactN
       guardarEstudiante(e)
       setElegidoId(elegido.id)
       setResultado({ tipo: 'reservado', parada: reserva.parada?.nombre ?? '' })
+      void vibrarExito()
     } catch (err) {
       const mensaje = err instanceof ErrorApi ? err.message : 'Algo salió mal. Intenta de nuevo.'
       const sinCupos = err instanceof ErrorApi && err.status === 409 && /cupos/i.test(mensaje)

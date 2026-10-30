@@ -1,0 +1,73 @@
+# Compila la APK de Android de RutaU (la web de apps/web empaquetada con Capacitor)
+# y la publica como descarga en la release "apk" del repositorio.
+name: APK de Android
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/web/**'
+      - 'package-lock.json'
+      - '.github/workflows/apk.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apk
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    env:
+      # La APK habla con las APIs de producción.
+      VITE_RUTAS_URL: https://rutau-rutas.vercel.app
+      VITE_RESERVAS_URL: https://rutau-reservas.vercel.app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Compilar la web
+        run: npm run build -w @rutau/web
+
+      - name: Copiar la web al proyecto de Android
+        working-directory: apps/web
+        run: npx cap sync android
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Compilar la APK
+        working-directory: apps/web/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+          cp app/build/outputs/apk/debug/app-debug.apk "$GITHUB_WORKSPACE/RutaU.apk"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RutaU-apk
+          path: RutaU.apk
+
+      - name: Publicar en la release "apk"
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete apk --yes --cleanup-tag || true
+          gh release create apk RutaU.apk \
+            --target "$GITHUB_SHA" \
+            --prerelease \
+            --title "RutaU para Android" \
+            --notes "APK de prueba compilada desde ${GITHUB_SHA::7}. Para instalarla: descarga RutaU.apk en el celular, ábrela y permite instalar apps de esta fuente. Si ya tenías una versión anterior, desinstálala primero."

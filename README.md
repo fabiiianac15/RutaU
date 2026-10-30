@@ -33,6 +33,13 @@ La propuesta completa está en [`docs/propuesta-rutau.docx`](docs/propuesta-ruta
 
 Las dos APIs corren en Vercel en la región Portland (`pdx1`), cerca de la base de datos de Supabase en Oregon, y solo aceptan peticiones del navegador (CORS) desde la web.
 
+### En el celular
+
+- **Instalar desde el navegador (PWA):** abre https://rutau-web.vercel.app y elige *Agregar a la pantalla de inicio* (Android) o *Compartir → Agregar a inicio* (iPhone).
+- **APK de Android:** la compila GitHub Actions en cada push que toque `apps/web` (`.github/workflows/apk.yml`) y la publica en la release [`apk`](https://github.com/fabiiianac15/RutaU/releases/tag/apk). Descarga `RutaU.apk` en el celular y permite instalar apps de esa fuente. Es una APK de prueba firmada con una clave de depuración: para actualizarla, desinstala la versión anterior.
+
+La APK es la misma web empaquetada con [Capacitor](https://capacitorjs.com) (`apps/web/capacitor.config.ts`, proyecto nativo en `apps/web/android`). Sus peticiones a las APIs salen por la red nativa de Android (CapacitorHttp) y vibra al confirmar una reserva.
+
 ### Desplegar
 
 Con `npx vercel login` hecho, cada carpeta enlazada (`npx vercel link`) y los secretos `DATABASE_URL` y `CLAVE_INTERNA` cargados en `rutau-rutas` y `rutau-reservas`:
