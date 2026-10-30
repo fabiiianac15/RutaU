@@ -64,6 +64,14 @@ export function Hoy({ accionBanda, onVerReservas }: { accionBanda?: React.ReactN
     setResultado(null)
   }
 
+  // En el celular, el bloque elegido se desplaza para que la hoja no lo tape
+  // (cada bloque tiene scroll-margin-bottom igual al alto de la hoja).
+  useEffect(() => {
+    if (elegidoId === null) return
+    const reducir = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    document.querySelector(`[data-bloque="${elegidoId}"]`)?.scrollIntoView({ block: 'nearest', behavior: reducir ? 'auto' : 'smooth' })
+  }, [elegidoId])
+
   const cambiarDia = (f: string) => {
     setFecha(f)
     setElegidoId(null)
@@ -110,7 +118,7 @@ export function Hoy({ accionBanda, onVerReservas }: { accionBanda?: React.ReactN
         <section
           aria-label="Horario del día"
           className="px-4 pt-3 lg:px-0 lg:pt-6 lg:pb-12"
-          style={{ paddingBottom: `calc(${altoHoja}px + 1.5rem)` }}
+          style={{ paddingBottom: `calc(${altoHoja}px + 1.5rem)`, ['--alto-hoja' as string]: `${altoHoja}px` }}
         >
           {viajes.estado === 'cargando' && <GrillaCargando />}
           {viajes.estado === 'error' && (
@@ -132,6 +140,7 @@ export function Hoy({ accionBanda, onVerReservas }: { accionBanda?: React.ReactN
                 estadoDe={estado}
                 seleccionado={elegido?.id ?? null}
                 tusParadas={tusParadas}
+                recienReservado={resultado?.tipo === 'reservado' ? (elegido?.id ?? null) : null}
                 onElegir={elegir}
               />
             ))}

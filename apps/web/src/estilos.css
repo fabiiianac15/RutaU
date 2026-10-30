@@ -10,6 +10,7 @@
   --color-rojo-suave: #f6e3e5;
   --color-rojo-relleno: #ebc0c5;
   --color-rojo-tinte: #fbeff0;
+  --color-rojo-ocupado: #e8b4ba;
   --color-tinta: #202124;
   --color-tinta-2: #3c4043;
   --color-apagada: #5f6368;
@@ -60,7 +61,6 @@
   :focus-visible {
     outline: 3px solid var(--color-tinta);
     outline-offset: 2px;
-    border-radius: 4px;
   }
 
   /* Sobre la banda roja el anillo de foco va en blanco para que se vea. */
@@ -95,13 +95,23 @@
   );
 }
 
-/* El momento de la app: al reservar, tu bloque se pinta de rojo de abajo hacia arriba,
-   como el relleno de ocupación que termina de llenarse contigo. */
+/* El momento de la app: el bloque que acabas de reservar se pinta de rojo de abajo
+   hacia arriba, como el relleno de ocupación que termina de llenarse contigo.
+   Solo ocurre una vez, en ese bloque; los demás bloques tuyos ya aparecen rojos. */
 .pintar {
   clip-path: inset(0);
   transition: clip-path 460ms var(--ease-salida);
   @starting-style {
     clip-path: inset(100% 0 0 0);
+  }
+}
+
+/* El texto pasa de tinta a blanco al mismo ritmo, así nunca queda blanco sobre rosado. */
+.pintar-texto {
+  color: var(--color-papel);
+  transition: color 460ms var(--ease-salida);
+  @starting-style {
+    color: var(--color-tinta);
   }
 }
 

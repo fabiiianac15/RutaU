@@ -53,8 +53,8 @@ export function MisReservas({ onVolver }: { onVolver: () => void }) {
           </button>
         }
       >
-        <div className="mx-auto flex max-w-6xl flex-col gap-1 px-4 pt-5 pb-5 text-papel lg:px-12">
-          <h1 className="text-hora font-extrabold tracking-[-0.02em]">Mis reservas</h1>
+        <div className="mx-auto flex max-w-6xl flex-col gap-0.5 px-4 pt-4 pb-5 text-papel lg:px-12">
+          <h1 className="text-lg font-bold">Mis reservas</h1>
           {codigo && (
             <p className="text-sm font-semibold">
               {nombre ? `${nombre} · ` : ''}código {codigo} ·{' '}
@@ -107,47 +107,49 @@ function Contenido({
   onVolver: () => void
 }) {
   const semana = semanaDe(reservas, ahora)
-  const hayPorVenir = semana.dias.length > 0
+  const [elegidaId, setElegidaId] = useState<string | null>(null)
+  // Sin elección, el panel muestra la próxima reserva activa.
+  const elegida = semana.activas.find((r) => r.id === elegidaId) ?? semana.activas[0] ?? null
+
+  if (semana.dias.length === 0 && semana.anteriores.length === 0) {
+    return (
+      <div className="mx-auto flex max-w-md flex-col gap-3">
+        <p className="font-semibold">Todavía no tienes reservas.</p>
+        <p className="text-sm text-tinta-2">Reserva tu cupo y aparecerá aquí, en tu horario de la semana.</p>
+        <Boton tipo="secundario" onClick={onVolver}>Ver viajes</Boton>
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[1fr_26rem] lg:items-start lg:gap-10">
       <section aria-label="Tu horario" className="flex flex-col gap-3">
-        {hayPorVenir ? (
-          <HorarioSemana semana={semana} hoy={hoy} />
+        {semana.dias.length > 0 ? (
+          <>
+            <HorarioSemana semana={semana} hoy={hoy} elegida={elegida?.id ?? null} onElegir={(r) => setElegidaId(r.id)} />
+            {semana.activas.length > 1 && <p className="text-sm text-apagada">Toca una reserva para ver su detalle o cancelarla.</p>}
+          </>
         ) : (
-          <div className="flex flex-col gap-3 rounded-bloque bg-sutil p-5">
-            <p className="font-semibold">No tienes viajes reservados por venir.</p>
-            <p className="text-sm text-tinta-2">Reserva tu cupo y aparecerá aquí, en tu horario de la semana.</p>
-            <Boton tipo="secundario" onClick={onVolver}>Ver viajes</Boton>
-          </div>
+          <p className="text-tinta-2">No tienes viajes reservados por venir.</p>
         )}
       </section>
 
-      <section aria-label="Detalle de tus reservas" className="flex flex-col gap-5">
+      <section aria-label="Detalle" className="flex flex-col gap-5 lg:sticky lg:top-6">
         {aviso && (
           <Aviso tipo={aviso.tipo} titulo={aviso.titulo}>
             {aviso.texto}
           </Aviso>
         )}
 
-        {semana.activas.length > 0 && (
-          <div className="flex flex-col gap-3">
-            <h2 className="text-etiqueta font-bold tracking-[0.04em] text-apagada uppercase">
-              {semana.activas.length === 1 ? 'Próxima' : 'Próximas'}
-            </h2>
-            {semana.activas.map((r) => (
-              <TarjetaActiva key={r.id} reserva={r} hoy={hoy} onCancelar={() => onCancelar(r)} />
-            ))}
-          </div>
-        )}
+        {elegida && <PanelReserva key={elegida.id} reserva={elegida} hoy={hoy} onCancelar={() => onCancelar(elegida)} />}
 
         {semana.canceladas.length > 0 && (
-          <div className="flex flex-col gap-2">
-            <h2 className="text-etiqueta font-bold tracking-[0.04em] text-apagada uppercase">Canceladas</h2>
+          <div className="flex flex-col gap-1">
+            <h2 className="font-semibold">Canceladas</h2>
             <ul className="flex flex-col divide-y divide-grilla">
               {semana.canceladas.map((r) => (
                 <li key={r.id} className="py-2.5 text-sm text-tinta-2">
-                  <span className="font-semibold line-through">{r.viaje && cuando(r, hoy)}</span> · {r.viaje?.ruta.nombre}
+                  <span className="font-semibold line-through">{cuando(r, hoy)}</span> · {r.viaje?.ruta.nombre}
                 </li>
               ))}
             </ul>
@@ -155,8 +157,8 @@ function Contenido({
         )}
 
         {semana.anteriores.length > 0 && (
-          <details className="group">
-            <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold text-tinta-2">
+          <details>
+            <summary className="flex min-h-11 cursor-pointer items-center font-semibold text-tinta-2">
               Viajes anteriores ({semana.anteriores.length})
             </summary>
             <ul className="flex flex-col divide-y divide-grilla">
@@ -174,12 +176,23 @@ function Contenido({
   )
 }
 
-const cuando = (r: Reserva, hoy: string) => `${etiquetaDia(r.viaje!.fecha, hoy)} ${r.viaje!.horaSalida}`
+const cuando = (r: Reserva, hoy: string) => (r.viaje ? `${etiquetaDia(r.viaje.fecha, hoy)} ${r.viaje.horaSalida}` : '')
 
 // Tu semana como el horario de clases: una columna por día, una fila por hora.
-function HorarioSemana({ semana, hoy }: { semana: ReturnType<typeof semanaDe>; hoy: string }) {
+// Tus reservas son bloques que se tocan para verlas o cancelarlas ahí mismo.
+function HorarioSemana({
+  semana,
+  hoy,
+  elegida,
+  onElegir,
+}: {
+  semana: ReturnType<typeof semanaDe>
+  hoy: string
+  elegida: string | null
+  onElegir: (r: Reserva) => void
+}) {
   return (
-    <div className="-mx-4 overflow-x-auto px-4 lg:mx-0 lg:px-0">
+    <div className="-mx-4 overflow-x-auto px-4 py-1 lg:mx-0 lg:px-0">
       {/* Columnas fijas: caben tres días en un celular; con más, la tabla se desplaza de lado. */}
       <table
         className="w-full table-fixed border-separate border-spacing-x-2 border-spacing-y-0"
@@ -191,11 +204,7 @@ function HorarioSemana({ semana, hoy }: { semana: ReturnType<typeof semanaDe>; h
               <span className="sr-only">Hora</span>
             </th>
             {semana.dias.map((d) => (
-              <th
-                key={d}
-                scope="col"
-                className={`pb-3 text-left text-sm font-semibold ${d === hoy ? 'text-rojo' : 'text-tinta-2'}`}
-              >
+              <th key={d} scope="col" className={`pb-3 text-left text-sm font-semibold ${d === hoy ? 'text-rojo' : 'text-tinta-2'}`}>
                 {etiquetaDia(d, hoy)}
               </th>
             ))}
@@ -204,14 +213,14 @@ function HorarioSemana({ semana, hoy }: { semana: ReturnType<typeof semanaDe>; h
         <tbody>
           {semana.horas.map((h) => (
             <tr key={h}>
-              <th scope="row" className="pt-2 pb-3 text-left align-top text-etiqueta font-bold text-apagada">
+              <th scope="row" className="border-r border-grilla pt-2 pb-3 text-left align-top text-etiqueta font-bold text-apagada">
                 {h}
               </th>
               {semana.dias.map((d) => (
                 <td key={d} className="border-t border-grilla pt-2 pb-3 align-top">
                   <div className="flex flex-col gap-2">
                     {(semana.celdas.get(`${d}|${h}`) ?? []).map((r) => (
-                      <CeldaReserva key={r.id} reserva={r} />
+                      <CeldaReserva key={r.id} reserva={r} elegida={r.id === elegida} onElegir={() => onElegir(r)} />
                     ))}
                   </div>
                 </td>
@@ -224,44 +233,52 @@ function HorarioSemana({ semana, hoy }: { semana: ReturnType<typeof semanaDe>; h
   )
 }
 
-function CeldaReserva({ reserva }: { reserva: Reserva }) {
-  const cancelada = reserva.estado === 'cancelada'
+function CeldaReserva({ reserva, elegida, onElegir }: { reserva: Reserva; elegida: boolean; onElegir: () => void }) {
+  if (reserva.estado === 'cancelada') {
+    return (
+      <div className="flex min-h-15.5 flex-col rounded-bloque border-[1.5px] border-dashed border-grilla px-3 py-2 text-apagada">
+        <span className="text-hora-bloque font-extrabold tracking-[-0.01em] line-through">{reserva.viaje?.horaSalida}</span>
+        <span className="text-sm font-semibold">Cancelada</span>
+      </div>
+    )
+  }
   return (
-    <div
-      className={`flex min-h-15.5 flex-col rounded-bloque px-3 py-2 ${
-        cancelada ? 'border-[1.5px] border-dashed border-grilla text-apagada' : 'bg-rojo text-papel'
+    <button
+      type="button"
+      onClick={onElegir}
+      aria-pressed={elegida}
+      aria-label={`Reserva de las ${reserva.viaje?.horaSalida}, sube en ${reserva.parada?.nombre}`}
+      className={`presionable flex min-h-15.5 w-full flex-col items-start rounded-bloque bg-rojo px-3 py-2 text-left text-papel ${
+        elegida ? 'shadow-[0_0_0_2px_var(--color-papel),0_0_0_4px_var(--color-tinta)]' : ''
       }`}
     >
       <span className="flex items-center gap-1.5">
-        <span className={`text-hora-bloque font-extrabold tracking-[-0.01em] ${cancelada ? 'line-through' : ''}`}>
-          {reserva.viaje?.horaSalida}
+        <span className="text-hora-bloque font-extrabold tracking-[-0.01em]">{reserva.viaje?.horaSalida}</span>
+        <span className="grid size-4.5 place-items-center rounded-full bg-papel text-rojo">
+          <Check className="size-3.5" strokeWidth={3.2} aria-hidden />
         </span>
-        {!cancelada && (
-          <span className="grid size-4.5 place-items-center rounded-full bg-papel text-rojo">
-            <Check className="size-3.5" strokeWidth={3.2} aria-hidden />
-          </span>
-        )}
       </span>
-      <span className="line-clamp-2 text-sm font-semibold">{cancelada ? 'Cancelada' : reserva.parada?.nombre}</span>
-    </div>
+      <span className="line-clamp-2 text-sm font-semibold">{reserva.parada?.nombre}</span>
+    </button>
   )
 }
 
-function TarjetaActiva({ reserva, hoy, onCancelar }: { reserva: Reserva; hoy: string; onCancelar: () => Promise<void> }) {
-  // Cancelar pide una segunda confirmación en el mismo lugar, sin ventana emergente.
+// Detalle de la reserva tocada en el horario. Cancelar pide una segunda confirmación
+// en el mismo lugar, sin ventana emergente.
+function PanelReserva({ reserva, hoy, onCancelar }: { reserva: Reserva; hoy: string; onCancelar: () => Promise<void> }) {
   const [paso, setPaso] = useState<'normal' | 'confirmando' | 'cancelando'>('normal')
 
   return (
-    <article className="flex flex-col gap-3 rounded-[12px] bg-rojo-tinte p-4 ring-[1.5px] ring-rojo ring-inset">
+    <article className="flex flex-col gap-3 border-t-2 border-rojo pt-4">
       <div>
-        <h3 className="text-lg font-bold">
+        <h2 className="text-lg font-bold">
           {cuando(reserva, hoy)} · {reserva.viaje?.ruta.nombre}
-        </h3>
-        <p className="text-sm text-tinta-2">Sube en {reserva.parada?.nombre ?? 'la parada que elegiste'}</p>
+        </h2>
+        <p className="text-sm text-tinta-2">Subes en {reserva.parada?.nombre ?? 'la parada que elegiste'}</p>
       </div>
       {paso === 'normal' ? (
         <Boton tipo="peligro" onClick={() => setPaso('confirmando')}>
-          Cancelar reserva
+          Cancelar esta reserva
         </Boton>
       ) : (
         <div className="flex flex-col gap-2">

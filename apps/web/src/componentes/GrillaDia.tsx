@@ -8,14 +8,17 @@ interface Props {
   seleccionado: number | null
   // viajeId → nombre de la parada, para los viajes que el estudiante ya reservó.
   tusParadas: Map<number, string>
+  recienReservado: number | null
   onElegir: (v: Viaje) => void
 }
 
 // El día como un horario de clases: columna de horas a la izquierda y los viajes
 // como bloques a su hora. Las horas sin viajes se comprimen en una sola línea.
-export function GrillaDia({ filas, estadoDe, seleccionado, tusParadas, onElegir }: Props) {
+export function GrillaDia({ filas, estadoDe, seleccionado, tusParadas, recienReservado, onElegir }: Props) {
   return (
-    <ol aria-label="Viajes del día" className="grid grid-cols-[3.25rem_1fr] gap-x-3 lg:grid-cols-[4.5rem_1fr] lg:gap-x-4">
+    <ol aria-label="Viajes del día" className="relative grid grid-cols-[3.25rem_1fr] gap-x-3 lg:grid-cols-[4.5rem_1fr] lg:gap-x-4">
+      {/* Filete vertical entre la columna de horas y los viajes, como en un horario impreso. */}
+      <li aria-hidden className="pointer-events-none absolute inset-y-0 left-[calc(3.25rem+0.375rem)] w-px bg-grilla lg:left-[calc(4.5rem+0.5rem)]" />
       {filas.map((fila) => {
         if (fila.tipo === 'ahora') {
           return (
@@ -45,6 +48,7 @@ export function GrillaDia({ filas, estadoDe, seleccionado, tusParadas, onElegir 
                       estado={estadoDe(v)}
                       seleccionado={seleccionado === v.id}
                       tuParada={tusParadas.get(v.id)}
+                      recienReservado={recienReservado === v.id}
                       onElegir={() => onElegir(v)}
                     />
                   </div>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Viaje } from '../api/tipos'
-import { detalleDe, estadoDe, filasDelDia } from './dia'
+import { detalleDe, estadoDe, FRANJA, filasDelDia, nivelOcupacion } from './dia'
 
 const viaje = (id: number, hora: string, disponibles = 40, capacidad = 40, ruta = 'Ruta Centro'): Viaje => ({
   id,
@@ -30,9 +30,27 @@ describe('estadoDe', () => {
 describe('detalleDe', () => {
   it('dice el estado con palabras, no solo con color', () => {
     expect(detalleDe(viaje(1, '12:30'), 'disponible')).toBe('40 libres · Centro')
-    expect(detalleDe(viaje(1, '13:00', 24, 30, 'Ruta Terminal'), 'disponible')).toBe('24 de 30 · Terminal')
+    expect(detalleDe(viaje(1, '13:00', 24, 30, 'Ruta Terminal'), 'disponible')).toBe('24 libres de 30 · Terminal')
     expect(detalleDe(viaje(1, '17:00', 2, 3), 'pocos')).toBe('Quedan 2 · Centro')
     expect(detalleDe(viaje(1, '06:00'), 'salio')).toBe('Salió · Centro')
+  })
+})
+
+describe('nivelOcupacion', () => {
+  it('redondea al cuarto más cercano', () => {
+    expect(nivelOcupacion(viaje(1, '12:30', 40, 40))).toBe(0)
+    expect(nivelOcupacion(viaje(1, '12:30', 20, 40))).toBe(0.5)
+    expect(nivelOcupacion(viaje(1, '12:30', 15, 30))).toBe(0.5)
+  })
+
+  it('muestra una franja delgada si hay poca gente, sin exagerarla a un cuarto', () => {
+    expect(nivelOcupacion(viaje(1, '12:30', 39, 40))).toBe(FRANJA)
+  })
+
+  it('reserva el bloque lleno solo para el bus lleno', () => {
+    expect(nivelOcupacion(viaje(1, '12:30', 9, 40))).toBe(0.75)
+    expect(nivelOcupacion(viaje(1, '12:30', 1, 3))).toBe(0.75)
+    expect(nivelOcupacion(viaje(1, '12:30', 0, 3))).toBe(1)
   })
 })
 

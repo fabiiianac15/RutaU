@@ -26,8 +26,19 @@ export function detalleDe(viaje: Viaje, estado: EstadoViaje) {
     default:
       return viaje.disponibles === viaje.bus.capacidad
         ? `${viaje.disponibles} libres · ${ruta}`
-        : `${viaje.disponibles} de ${viaje.bus.capacidad} · ${ruta}`
+        : `${viaje.disponibles} libres de ${viaje.bus.capacidad} · ${ruta}`
   }
+}
+
+// Ocupación en una escala fija de cuartos, redondeada al más cercano para no exagerar:
+// el bloque lleno es solo el bus lleno, y un bus con poca gente muestra una franja delgada.
+export const FRANJA = 0.08
+
+export function nivelOcupacion(viaje: Viaje) {
+  if (viaje.disponibles <= 0) return 1
+  if (viaje.ocupados <= 0) return 0
+  const cuarto = Math.round((viaje.ocupados / viaje.bus.capacidad) * 4) / 4
+  return Math.min(0.75, Math.max(FRANJA, cuarto))
 }
 
 export type Fila =

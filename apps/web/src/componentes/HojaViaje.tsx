@@ -97,12 +97,7 @@ export function HojaViaje(props: Props) {
   } else {
     cuerpo = (
       <>
-        <fieldset className="flex flex-col gap-2">
-          <legend className="mb-2 text-sm font-semibold">¿Dónde subes?</legend>
-          {paradas.map((p) => (
-            <OpcionParada key={p.id} parada={p} elegida={p.id === paradaId} onElegir={() => setParadaId(p.id)} />
-          ))}
-        </fieldset>
+        <SelectorParada paradas={paradas} elegida={paradaId} onElegir={setParadaId} />
         {resultado?.tipo === 'error' && <Aviso tipo="error" titulo="No pudimos reservar">{resultado.mensaje}</Aviso>}
         <Boton
           cargando={reservando}
@@ -135,23 +130,51 @@ export function HojaViaje(props: Props) {
   )
 }
 
-function OpcionParada({ parada, elegida, onElegir }: { parada: Parada; elegida: boolean; onElegir: () => void }) {
+// "Parque 29 de Mayo" → "Parque 29", "Sede El Algodonal" → "Algodonal", "Hospital Emiro…" → "Hospital".
+export function nombreCorto(nombre: string) {
+  const palabras = nombre.split(' ').filter((p) => !['de', 'del', 'la', 'el', 'El', 'La'].includes(p))
+  if (palabras[0] === 'Sede') return palabras.at(-1) ?? nombre
+  if (palabras[0] === 'Parque') return palabras.slice(0, 2).join(' ')
+  return palabras[0] ?? nombre
+}
+
+// Control segmentado: las paradas en una fila con su nombre corto, y el nombre completo
+// de la elegida debajo. Ocupa una línea en vez de tres y deja ver más horario.
+function SelectorParada({ paradas, elegida, onElegir }: { paradas: Parada[]; elegida: number | null; onElegir: (id: number) => void }) {
+  const actual = paradas.find((p) => p.id === elegida)
   return (
-    <label
-      className={`presionable flex min-h-12 cursor-pointer items-center gap-3 rounded-control px-4 py-3 transition-colors duration-150 ${
-        elegida ? 'bg-rojo-tinte ring-2 ring-rojo ring-inset' : 'bg-papel ring-[1.5px] ring-grilla ring-inset hover:bg-sutil'
-      }`}
-    >
-      <span className={`w-3 text-etiqueta font-bold ${elegida ? 'text-rojo' : 'text-apagada'}`}>{parada.orden}</span>
-      <span className={`flex-1 font-semibold ${elegida ? 'text-rojo-oscuro' : 'text-tinta'}`}>{parada.nombre}</span>
-      <input
-        type="radio"
-        name="parada"
-        checked={elegida}
-        onChange={onElegir}
-        className="size-5.5 shrink-0 accent-rojo"
-      />
-    </label>
+    <fieldset className="flex flex-col gap-2">
+      <legend className="mb-2 text-sm font-semibold">¿Dónde subes?</legend>
+      <div className="grid auto-cols-fr grid-flow-col gap-1 rounded-control bg-sutil p-1">
+        {paradas.map((p) => {
+          const esta = p.id === elegida
+          return (
+            <label
+              key={p.id}
+              className={`presionable relative flex min-h-11 cursor-pointer items-center justify-center rounded-lg px-2 text-center text-sm font-semibold transition-colors duration-150 has-focus-visible:outline-3 has-focus-visible:outline-tinta ${
+                esta ? 'bg-papel text-rojo-oscuro shadow-[0_1px_3px_rgb(0_0_0/0.12)] ring-2 ring-rojo ring-inset' : 'text-tinta-2 hover:bg-papel/60'
+              }`}
+            >
+              <input
+                type="radio"
+                name="parada"
+                value={p.id}
+                checked={esta}
+                onChange={() => onElegir(p.id)}
+                aria-label={p.nombre}
+                className="sr-only"
+              />
+              {nombreCorto(p.nombre)}
+            </label>
+          )
+        })}
+      </div>
+      {actual && (
+        <p className="text-sm text-tinta-2">
+          Subes en <span className="font-semibold text-tinta">{actual.nombre}</span> · parada {actual.orden} de {paradas.length}
+        </p>
+      )}
+    </fieldset>
   )
 }
 

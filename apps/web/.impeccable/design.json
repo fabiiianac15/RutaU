@@ -1,0 +1,448 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-29T19:30:00-05:00",
+  "title": "Design System: RutaU",
+  "extensions": {
+    "colorMeta": {
+      "rojo": {
+        "role": "primary",
+        "displayName": "Rojo UFPSO",
+        "canonical": "oklch(52.7% 0.207 25)",
+        "tonalRamp": [
+          "#270000",
+          "#570000",
+          "#890009",
+          "#bd1421",
+          "#e54d4a",
+          "#ff8279",
+          "#ffb0a6",
+          "#ffd6ce"
+        ]
+      },
+      "rojo-oscuro": {
+        "role": "primary",
+        "displayName": "Rojo oscuro",
+        "canonical": "oklch(44.6% 0.174 25)",
+        "tonalRamp": [
+          "#240000",
+          "#500005",
+          "#80151a",
+          "#b13031",
+          "#d85c57",
+          "#f68b83",
+          "#ffb6ae",
+          "#ffdbd4"
+        ]
+      },
+      "rojo-suave": {
+        "role": "primary",
+        "displayName": "Rojo suave",
+        "canonical": "oklch(93.2% 0.021 10)",
+        "tonalRamp": [
+          "#0f0a0a",
+          "#2d2425",
+          "#4e4143",
+          "#716263",
+          "#948586",
+          "#b8aaab",
+          "#d9cecf",
+          "#f5eced"
+        ]
+      },
+      "rojo-relleno": {
+        "role": "primary",
+        "displayName": "Rojo relleno",
+        "canonical": "oklch(84.7% 0.050 10)",
+        "tonalRamp": [
+          "#130709",
+          "#342023",
+          "#583c40",
+          "#7f5b60",
+          "#a27e83",
+          "#c5a5a8",
+          "#e4c9cc",
+          "#fde9eb"
+        ]
+      },
+      "rojo-tinte": {
+        "role": "primary",
+        "displayName": "Rojo tinte",
+        "canonical": "oklch(96.2% 0.013 12)",
+        "tonalRamp": [
+          "#0e0a0a",
+          "#2a2525",
+          "#4a4343",
+          "#6d6364",
+          "#908687",
+          "#b4abac",
+          "#d6cfcf",
+          "#f2eded"
+        ]
+      },
+      "rojo-ocupado": {
+        "role": "primary",
+        "displayName": "Rojo ocupado",
+        "canonical": "oklch(81.9% 0.061 11)",
+        "tonalRamp": [
+          "#150608",
+          "#371e22",
+          "#5c3a3e",
+          "#84585e",
+          "#a87c81",
+          "#c9a2a7",
+          "#e8c8cb",
+          "#ffe7ea"
+        ],
+        "note": "Added in the finish review; Figma variable color/marca/rojo-ocupado in the RutaU collection (mode Claro)."
+      },
+      "tinta": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "canonical": "oklch(24.8% 0.006 271)",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#262628",
+          "#444548",
+          "#656669",
+          "#88898c",
+          "#adaeb1",
+          "#d0d1d3",
+          "#eeeef0"
+        ]
+      },
+      "tinta-2": {
+        "role": "neutral",
+        "displayName": "Tinta 2",
+        "canonical": "oklch(36.9% 0.007 240)",
+        "tonalRamp": [
+          "#0a0b0c",
+          "#242729",
+          "#424548",
+          "#63676a",
+          "#868a8d",
+          "#abaeb1",
+          "#ced1d4",
+          "#eceff0"
+        ]
+      },
+      "apagada": {
+        "role": "neutral",
+        "displayName": "Apagada",
+        "canonical": "oklch(49.8% 0.009 254)",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#242729",
+          "#424549",
+          "#63666b",
+          "#86898e",
+          "#abaeb2",
+          "#ced1d5",
+          "#eceff1"
+        ]
+      },
+      "papel": {
+        "role": "neutral",
+        "displayName": "Papel",
+        "canonical": "oklch(100.0% 0.000 90)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#262626",
+          "#454545",
+          "#666666",
+          "#898989",
+          "#aeaeae",
+          "#d1d1d1",
+          "#eeeeee"
+        ]
+      },
+      "sutil": {
+        "role": "neutral",
+        "displayName": "Sutil",
+        "canonical": "oklch(96.3% 0.003 229)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#262727",
+          "#444546",
+          "#656667",
+          "#88898a",
+          "#adaeaf",
+          "#d0d1d2",
+          "#eeeeef"
+        ]
+      },
+      "rayado": {
+        "role": "neutral",
+        "displayName": "Rayado",
+        "canonical": "oklch(93.6% 0.005 258)",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252628",
+          "#444547",
+          "#646669",
+          "#88898c",
+          "#acaeb0",
+          "#d0d1d3",
+          "#edeef0"
+        ]
+      },
+      "grilla": {
+        "role": "neutral",
+        "displayName": "Grilla",
+        "canonical": "oklch(89.4% 0.006 265)",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252628",
+          "#444548",
+          "#646669",
+          "#87898c",
+          "#acaeb1",
+          "#d0d1d3",
+          "#edeef0"
+        ]
+      },
+      "exito": {
+        "role": "status",
+        "displayName": "Éxito",
+        "canonical": "oklch(48.8% 0.130 149)",
+        "tonalRamp": [
+          "#001100",
+          "#00310c",
+          "#085422",
+          "#24793c",
+          "#509d60",
+          "#81c08b",
+          "#aee0b5",
+          "#d4fad9"
+        ]
+      },
+      "exito-suave": {
+        "role": "status",
+        "displayName": "Éxito suave",
+        "canonical": "oklch(95.4% 0.020 155)",
+        "tonalRamp": [
+          "#080c09",
+          "#222824",
+          "#3e4841",
+          "#5e6961",
+          "#818d84",
+          "#a7b1aa",
+          "#cbd3cd",
+          "#eaf0ec"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "hora": {
+        "displayName": "Hora",
+        "purpose": "Selected trip time in the sheet header; the only large size."
+      },
+      "hora-bloque": {
+        "displayName": "Hora de bloque",
+        "purpose": "Time inside trip and reservation blocks."
+      },
+      "titulo": {
+        "displayName": "Título",
+        "purpose": "Route name, panel headings, view title in the band."
+      },
+      "cuerpo": {
+        "displayName": "Cuerpo",
+        "purpose": "Running text; buttons at weight 800."
+      },
+      "detalle": {
+        "displayName": "Detalle",
+        "purpose": "Block detail line, tabs, labels, segments."
+      },
+      "etiqueta": {
+        "displayName": "Etiqueta",
+        "purpose": "Hour column labels, now chip, Últimos cupos."
+      }
+    },
+    "shadows": [
+      {
+        "name": "hoja-movil",
+        "value": "0 -6px 18px rgb(0 0 0 / 0.08)",
+        "purpose": "Bottom sheet on phones, with a grilla top border."
+      },
+      {
+        "name": "hoja-escritorio",
+        "value": "0 8px 24px rgb(0 0 0 / 0.08)",
+        "purpose": "Sticky side panel on desktop."
+      },
+      {
+        "name": "segmento-elegido",
+        "value": "0 1px 3px rgb(0 0 0 / 0.12)",
+        "purpose": "Chosen stop lifting out of its track."
+      },
+      {
+        "name": "anillo-seleccion",
+        "value": "0 0 0 2px var(--color-papel), 0 0 0 4px var(--color-tinta)",
+        "purpose": "Selected trip or reservation block; a ring, not elevation."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-salida",
+        "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "purpose": "Press, occupancy fill height, paint-in."
+      },
+      {
+        "name": "ease-hoja",
+        "value": "cubic-bezier(0.32, 0.72, 0, 1)",
+        "purpose": "Sheet entering from below on phones."
+      },
+      {
+        "name": "presionable",
+        "value": "transform scale(0.97) 160ms ease-salida",
+        "purpose": "Everything tappable shrinks slightly on press."
+      },
+      {
+        "name": "pintar",
+        "value": "clip-path inset(100% 0 0 0) to inset(0) 460ms ease-salida",
+        "purpose": "One-time red paint of the block just reserved; text color follows at the same pace."
+      },
+      {
+        "name": "hoja",
+        "value": "translateY(100%) to 0 320ms ease-hoja, below 1024px",
+        "purpose": "Sheet rises once when the day loads."
+      },
+      {
+        "name": "ocupacion",
+        "value": "height 300ms ease-salida",
+        "purpose": "Occupancy fill moving between ramp steps."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "all transitions and animations 1ms",
+        "purpose": "prefers-reduced-motion: reduce."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón primario",
+      "kind": "button",
+      "refersTo": "boton-primario",
+      "description": "Main action: Reservar mi cupo, Confirmar reserva, Sí, cancelar.",
+      "html": "<button class=\"ds-boton ds-boton-primario\">Reservar mi cupo</button>",
+      "css": ".ds-boton{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:52px;padding:0 16px;border:0;border-radius:10px;font-family:'Atkinson Hyperlegible Next Variable',system-ui,sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:background-color 150ms,transform 160ms cubic-bezier(0.23,1,0.32,1)}.ds-boton:active{transform:scale(0.97)}.ds-boton:focus-visible{outline:3px solid #202124;outline-offset:2px}.ds-boton-primario{background:var(--color-rojo,#c71122);color:var(--color-papel,#fff)}.ds-boton-primario:hover{background:var(--color-rojo-oscuro,#9e0d1b)}"
+    },
+    {
+      "name": "Botón secundario",
+      "kind": "button",
+      "refersTo": "boton-secundario",
+      "description": "Alternatives: ver otro viaje, intentar de nuevo, volver.",
+      "html": "<button class=\"ds-boton-sec\">Ver el de las 13:00</button>",
+      "css": ".ds-boton-sec{display:flex;align-items:center;justify-content:center;width:100%;height:52px;padding:0 16px;border:0;border-radius:10px;background:#fff;color:#202124;box-shadow:inset 0 0 0 1.5px #dadce0;font-family:'Atkinson Hyperlegible Next Variable',system-ui,sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:background-color 150ms,transform 160ms cubic-bezier(0.23,1,0.32,1)}.ds-boton-sec:hover{background:#f1f3f4}.ds-boton-sec:active{transform:scale(0.97)}.ds-boton-sec:focus-visible{outline:3px solid #202124;outline-offset:2px}"
+    },
+    {
+      "name": "Botón peligro",
+      "kind": "button",
+      "refersTo": "boton-peligro",
+      "description": "Starts a cancellation; confirmation follows in place.",
+      "html": "<button class=\"ds-boton-peligro\">Cancelar esta reserva</button>",
+      "css": ".ds-boton-peligro{display:flex;align-items:center;justify-content:center;width:100%;height:52px;padding:0 16px;border:0;border-radius:10px;background:#fff;color:#9e0d1b;box-shadow:inset 0 0 0 1.5px #c71122;font-family:'Atkinson Hyperlegible Next Variable',system-ui,sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:background-color 150ms,transform 160ms cubic-bezier(0.23,1,0.32,1)}.ds-boton-peligro:hover{background:#fbeff0}.ds-boton-peligro:active{transform:scale(0.97)}.ds-boton-peligro:focus-visible{outline:3px solid #202124;outline-offset:2px}"
+    },
+    {
+      "name": "Campo",
+      "kind": "input",
+      "refersTo": "campo",
+      "description": "Labeled field with a permanent help/error line.",
+      "html": "<div class=\"ds-campo\"><label for=\"ds-c\">Código estudiantil</label><input id=\"ds-c\" inputmode=\"numeric\" placeholder=\"990001\"><p>El de tu carné, solo números</p></div>",
+      "css": ".ds-campo{display:flex;flex-direction:column;gap:6px;font-family:'Atkinson Hyperlegible Next Variable',system-ui,sans-serif;color:#202124}.ds-campo label{font-size:14px;font-weight:600}.ds-campo input{height:48px;padding:0 16px;border:0;border-radius:10px;background:#fff;font:inherit;font-size:16px;box-shadow:inset 0 0 0 1.5px #dadce0;outline:none;transition:box-shadow 150ms}.ds-campo input::placeholder{color:#5f6368}.ds-campo input:focus{box-shadow:inset 0 0 0 2px #202124}.ds-campo input[aria-invalid=true]{box-shadow:inset 0 0 0 2px #c71122}.ds-campo p{margin:0;font-size:14px;color:#5f6368}"
+    },
+    {
+      "name": "Banda con pestañas de día",
+      "kind": "nav",
+      "refersTo": "pestana-dia",
+      "description": "Red UFPSO shell with wordmark, band link and day tabs cut into the paper.",
+      "html": "<header class=\"ds-banda\"><div class=\"ds-banda-fila\"><span class=\"ds-marca\">Ruta<span>U</span></span><a href=\"#\" class=\"ds-banda-link\">Mis reservas</a></div><div class=\"ds-tabs\" role=\"tablist\"><button role=\"tab\" aria-selected=\"false\">Hoy jue 29</button><button role=\"tab\" aria-selected=\"true\">Vie 30</button><button role=\"tab\" aria-selected=\"false\">Sáb 31</button></div></header>",
+      "css": ".ds-banda{background:#c71122;padding-top:14px;font-family:'Atkinson Hyperlegible Next Variable',system-ui,sans-serif}.ds-banda-fila{display:flex;justify-content:space-between;align-items:center;padding:0 16px}.ds-marca{display:flex;align-items:center;gap:2px;color:#fff;font-size:1.375rem;font-weight:800;line-height:1;letter-spacing:-0.01em}.ds-marca span{background:#fff;color:#c71122;border-radius:6px;padding:2px 6px}.ds-banda-link{background:#fff;color:#c71122;border-radius:10px;padding:10px 14px;font-size:14px;font-weight:600;text-decoration:none;transition:background-color 150ms}.ds-banda-link:hover{background:#fbeff0}.ds-banda :focus-visible{outline:3px solid #fff;outline-offset:2px}.ds-tabs{display:flex;margin-top:14px;padding:0 16px}.ds-tabs button{flex:1;min-height:44px;padding:10px 8px 12px;border:0;border-radius:12px 12px 0 0;background:transparent;color:#fff;font:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:background-color 150ms}.ds-tabs button:hover{background:#9e0d1b}.ds-tabs button[aria-selected=true]{background:#fff;color:#c71122}"
+    },
+    {
+      "name": "Bloque de viaje",
+      "kind": "custom",
+      "refersTo": "bloque-viaje",
+      "description": "A trip as a class in the schedule: available with occupancy fill, yours in solid red, departed hatched, selected with the ink ring.",
+      "html": "<div class=\"ds-bloques\"><button class=\"ds-bloque\" aria-pressed=\"true\"><span class=\"ds-fill\" style=\"height:25%\"></span><b>13:00</b><span>15 libres de 30 · Terminal</span></button><button class=\"ds-bloque ds-pocos\"><span class=\"ds-fill\" style=\"height:75%\"></span><b>17:00</b><span>Quedan 2 · Centro</span><em>Últimos cupos</em></button><button class=\"ds-bloque ds-tuyo\"><b>12:30 <i><svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg></i></b><span>Tu cupo · Parque 29 de Mayo</span></button><button class=\"ds-bloque ds-salio\" disabled><b><s>06:00</s></b><span>Salió · Centro</span></button></div>",
+      "css": ".ds-bloques{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-family:'Atkinson Hyperlegible Next Variable',system-ui,sans-serif;font-variant-numeric:tabular-nums}.ds-bloque{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;min-height:62px;padding:8px 12px;border:0;border-radius:8px;background:#f6e3e5;color:#202124;text-align:left;font:inherit;cursor:pointer;transition:background-color 150ms,transform 160ms cubic-bezier(0.23,1,0.32,1)}.ds-bloque:hover{background:#f1d2d5}.ds-bloque:active:not(:disabled){transform:scale(0.97)}.ds-bloque:focus-visible{outline:3px solid #202124;outline-offset:2px}.ds-bloque[aria-pressed=true]{box-shadow:0 0 0 2px #fff,0 0 0 4px #202124}.ds-fill{position:absolute;left:0;right:0;bottom:0;z-index:-1;background:#e8b4ba;transition:height 300ms cubic-bezier(0.23,1,0.32,1)}.ds-bloque b{display:flex;align-items:center;gap:6px;font-size:1.25rem;line-height:1.5rem;font-weight:800;letter-spacing:-0.01em}.ds-bloque span:not(.ds-fill){font-size:14px;font-weight:600}.ds-bloque em{font-style:normal;font-size:12px;font-weight:700;color:#9e0d1b}.ds-tuyo{background:#c71122;color:#fff}.ds-tuyo:hover{background:#c71122}.ds-tuyo i{display:grid;place-items:center;width:18px;height:18px;border-radius:9999px;background:#fff;color:#c71122}.ds-salio{background:repeating-linear-gradient(135deg,#f1f3f4 0 6px,#e8eaed 6px 12px);color:#5f6368;cursor:default}"
+    },
+    {
+      "name": "Selector de parada",
+      "kind": "chip",
+      "refersTo": "selector-parada",
+      "description": "Segmented stop picker with short names; full name shown below.",
+      "html": "<fieldset class=\"ds-sel\"><legend>¿Dónde subes?</legend><div class=\"ds-sel-pista\"><label class=\"ds-on\"><input type=\"radio\" name=\"p\" checked>Parque 29</label><label><input type=\"radio\" name=\"p\">Hospital</label><label><input type=\"radio\" name=\"p\">Algodonal</label></div></fieldset>",
+      "css": ".ds-sel{border:0;padding:0;margin:0;font-family:'Atkinson Hyperlegible Next Variable',system-ui,sans-serif}.ds-sel legend{margin-bottom:8px;font-size:14px;font-weight:600;color:#202124}.ds-sel-pista{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;padding:4px;border-radius:10px;background:#f1f3f4}.ds-sel-pista label{display:flex;align-items:center;justify-content:center;min-height:44px;padding:0 8px;border-radius:8px;font-size:14px;font-weight:600;color:#3c4043;cursor:pointer;transition:background-color 150ms,transform 160ms cubic-bezier(0.23,1,0.32,1)}.ds-sel-pista label:hover{background:rgb(255 255 255/0.6)}.ds-sel-pista label:active{transform:scale(0.97)}.ds-sel-pista label:has(:focus-visible){outline:3px solid #202124}.ds-sel-pista input{position:absolute;opacity:0;width:1px;height:1px}.ds-sel-pista .ds-on{background:#fff;color:#9e0d1b;box-shadow:inset 0 0 0 2px #c71122,0 1px 3px rgb(0 0 0/0.12)}"
+    },
+    {
+      "name": "Aviso",
+      "kind": "card",
+      "refersTo": "aviso-error",
+      "description": "Success or error notice; every no says what happened and what next.",
+      "html": "<div class=\"ds-aviso\" role=\"alert\"><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 8v4M12 16h.01\"/></svg><div><p class=\"ds-aviso-t\">Este bus ya se llenó</p><p class=\"ds-aviso-b\">El de las 13:00 por Ruta Terminal todavía tiene 15 cupos.</p></div></div>",
+      "css": ".ds-aviso{display:flex;gap:12px;padding:12px 16px;border-radius:10px;background:#fbeff0;font-family:'Atkinson Hyperlegible Next Variable',system-ui,sans-serif}.ds-aviso svg{flex-shrink:0;margin-top:2px;color:#c71122}.ds-aviso p{margin:0}.ds-aviso-t{font-weight:600;color:#9e0d1b}.ds-aviso-b{font-size:14px;color:#202124}"
+    }
+  ],
+  "narrative": {
+    "northStar": "El horario de clases",
+    "overview": "RutaU is drawn as the student's class schedule. The day is a grid of hours on white paper with gray hairlines; each bus trip sits as a block at its departure time, and a reservation gets painted in solid red like one more class. The shell is the UFPSO red band (header and day tabs). Everything inside the band is paper, rules and blocks. It deliberately avoids the category default of a map with a bottom sheet of identical cards.\n\nThe density is that of a printed timetable. There is an hour column on the left with a vertical rule. Hours with no trips collapse into one line of text. Simultaneous trips sit side by side, and a \"now\" line in ink marks the present. The interface speaks in short, tabular figures: times, seats left, stops. One typeface, Atkinson Hyperlegible Next, carries everything with tabular numerals, and only the departure time gets large.\n\nMotion is rare and means something. Pressing anything shrinks it slightly. The sheet rises once when the day loads. The block you just reserved fills with red from bottom to top, the way the occupancy fill finishes filling with you. That paint happens once, on that one block.",
+    "keyCharacteristics": [
+      "Red band shell, white paper body, gray grid hairlines.",
+      "Trip blocks in soft red with an occupancy fill on a fixed quarter ramp.",
+      "Solid red block means only one thing: you have a seat.",
+      "No state is shown by color alone: every state has words, and departed or cancelled trips also get texture or strikethrough.",
+      "One typeface, tabular figures, a closed scale where the time is the only large size.",
+      "Flat paper. Only the trip sheet floats."
+    ],
+    "rules": [
+      {
+        "name": "The One Meaning of Solid Red Rule",
+        "body": "Inside the timetable, a solid red block means you have a seat, and nothing else. Choosing a block only adds an ink ring around it. It never changes the fill.",
+        "section": "colors"
+      },
+      {
+        "name": "The Fixed Ramp Rule",
+        "body": "Occupancy is never drawn proportionally. It rounds to the nearest quarter and is clamped. Zero occupied shows no fill, a lightly used bus shows an 8% strip, and the levels in between are 25%, 50% and 75%. Only a full bus fills the whole block.",
+        "section": "colors"
+      },
+      {
+        "name": "The Red Shell Rule",
+        "body": "Red is the shell (band and tabs) and the possession mark. On the band, the focus ring turns white.",
+        "section": "colors"
+      },
+      {
+        "name": "The Time Is the Only Large Size Rule",
+        "body": "The scale is closed. Nothing but a departure time goes above 1.125rem. The one exception is the wordmark, at 1.375rem.",
+        "section": "typography"
+      },
+      {
+        "name": "The Only the Sheet Floats Rule",
+        "body": "Blocks, notices, buttons and fields never cast shadows. If something needs separation, use a hairline or a fill.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do place every trip at its departure hour in the timetable grid, with hairline rules and collapsed empty hours.",
+      "Do reserve solid rojo blocks for trips the student holds a confirmed seat on.",
+      "Do draw occupancy with the rojo-ocupado layer on the fixed quarter ramp, and fill the block completely only when the bus is full.",
+      "Do pair every state with words, and add hatching, dashing or strikethrough where gray alone would carry it.",
+      "Do keep touch targets at 44px or more (buttons 52px, fields 48px, tabs and segments 44px).",
+      "Do use the white focus ring on the red band and the 3px ink ring everywhere else.",
+      "Do confirm destructive actions in place, as a second step inside the same panel."
+    ],
+    "donts": [
+      "Don't use a solid red fill to show selection. Selection is the ink ring.",
+      "Don't draw occupancy as a precise percentage bar.",
+      "Don't add a second typeface, or any size above 1.125rem other than a departure time.",
+      "Don't give blocks, notices or buttons shadows. Only the sheet floats.",
+      "Don't show white text on the soft-red fills.",
+      "Don't let a cancelled or departed trip disappear from its slot. Strike it through and label it."
+    ]
+  }
+}

@@ -2,6 +2,31 @@
   "detector": {
     "ignoreRules": [],
     "ignoreFiles": [],
-    "ignoreValues": []
+    "ignoreValues": [
+      {
+        "rule": "design-system-font-size",
+        "value": "1.375rem",
+        "files": [
+          "src/componentes/Banda.tsx"
+        ],
+        "createdAt": "2026-10-30T00:15:18.201Z",
+        "reason": "Claude: the RutaU wordmark is brand art set at the Figma 'marca' text style (22px), not body copy on the type ramp"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "atkinson hyperlegible next",
+        "createdAt": "2026-10-30T00:15:46.450Z",
+        "reason": "Claude: same family as DESIGN.md's 'Atkinson Hyperlegible Next Variable' (static vs variable name of one Google font)"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "barlow condensed",
+        "files": [
+          ".impeccable/mocks/decision/challenger-flaps.html"
+        ],
+        "createdAt": "2026-10-30T00:15:46.461Z",
+        "reason": "Claude: rejected decision-round sketch (split-flap challenger), not shipping code"
+      }
+    ]
   }
 }
