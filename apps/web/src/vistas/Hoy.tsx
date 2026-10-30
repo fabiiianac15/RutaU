@@ -60,7 +60,8 @@ export function Hoy({ accionBanda, onVerReservas }: { accionBanda?: React.ReactN
         )[0] ?? null)
     : null
 
-  const paradas = rutas.estado === 'listo' && elegido ? (rutas.datos.find((r) => r.id === elegido.ruta.id)?.paradas ?? []) : []
+  const rutaElegida = rutas.estado === 'listo' && elegido ? rutas.datos.find((r) => r.id === elegido.ruta.id) : undefined
+  const paradas = rutaElegida?.paradas ?? []
 
   const elegir = (v: Viaje) => {
     setElegidoId(v.id)
@@ -173,6 +174,7 @@ export function Hoy({ accionBanda, onVerReservas }: { accionBanda?: React.ReactN
                 viaje={elegido}
                 estado={estado(elegido)}
                 paradas={paradas}
+                ruta={rutaElegida}
                 tuParada={tusParadas.get(elegido.id) ?? (resultado?.tipo === 'reservado' ? resultado.parada : undefined)}
                 estudiante={estudiante}
                 resultado={resultado}

@@ -1,8 +1,9 @@
 import { useState, type FormEvent, type ReactNode } from 'react'
-import type { Parada, Viaje } from '../api/tipos'
+import type { Parada, Ruta, Viaje } from '../api/tipos'
 import type { EstadoViaje } from '../lib/dia'
 import { codigoValido, type Estudiante } from '../lib/estudiante'
 import { Aviso, Boton, Campo } from './base'
+import { MapaRuta } from './MapaRuta'
 
 export type Resultado =
   | { tipo: 'reservado'; parada: string }
@@ -15,6 +16,8 @@ interface Props {
   viaje: Viaje
   estado: EstadoViaje
   paradas: Parada[]
+  // La ruta completa con su recorrido, para el mapa.
+  ruta?: Ruta
   // Parada reservada si el viaje ya es del estudiante.
   tuParada?: string
   estudiante: Estudiante | null
@@ -100,6 +103,9 @@ export function HojaViaje(props: Props) {
     cuerpo = (
       <>
         <SelectorParada paradas={paradas} elegida={paradaId} onElegir={setParadaId} />
+        {props.ruta?.trazado && (
+          <MapaRuta compacto ruta={props.ruta} paradaElegida={paradaId} onElegirParada={setParadaId} className="h-44 lg:h-56" />
+        )}
         {resultado?.tipo === 'error' && <Aviso tipo="error" titulo="No se pudo reservar">{resultado.mensaje}</Aviso>}
         <Boton
           cargando={reservando}
@@ -132,8 +138,11 @@ export function HojaViaje(props: Props) {
   )
 }
 
-// "Parque 29 de Mayo" → "Parque 29", "Sede El Algodonal" → "Algodonal", "Hospital Emiro…" → "Hospital".
+// "Parque 29 de Mayo" → "Parque 29", "Sede El Algodonal" → "Algodonal", "Hospital Emiro…" → "Hospital",
+// "Avenida Circunvalar · La Paz" → "La Paz" (si la parada dice su barrio, el barrio la distingue).
 export function nombreCorto(nombre: string) {
+  const barrio = nombre.split(' · ')[1]
+  if (barrio) return barrio
   const palabras = nombre.split(' ').filter((p) => !['de', 'del', 'la', 'el', 'El', 'La'].includes(p))
   if (palabras[0] === 'Sede') return palabras.at(-1) ?? nombre
   if (palabras[0] === 'Parque') return palabras.slice(0, 2).join(' ')

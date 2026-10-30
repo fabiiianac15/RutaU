@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Hoy } from './vistas/Hoy'
 import { MisReservas } from './vistas/MisReservas'
+import { Rutas } from './vistas/Rutas'
 
 // Dos vistas no necesitan un router: el hash de la URL basta y deja que el botón
 // "atrás" del celular funcione.
 const MIS_RESERVAS = '#/mis-reservas'
+const RUTAS = '#/rutas'
+
+const enlaceBanda =
+  'presionable rounded-control bg-papel px-3.5 py-2.5 text-sm font-semibold text-rojo transition-colors duration-150 hover:bg-rojo-tinte'
 
 function useHash() {
   const [hash, setHash] = useState(() => window.location.hash)
@@ -26,17 +31,20 @@ export function App() {
   }
 
   if (hash === MIS_RESERVAS) return <MisReservas onVolver={() => irA('')} />
+  if (hash === RUTAS) return <Rutas onVolver={() => irA('')} />
 
   return (
     <Hoy
       onVerReservas={() => irA(MIS_RESERVAS)}
       accionBanda={
-        <a
-          href={MIS_RESERVAS}
-          className="presionable rounded-control bg-papel px-3.5 py-2.5 text-sm font-semibold text-rojo transition-colors duration-150 hover:bg-rojo-tinte"
-        >
-          Mis reservas
-        </a>
+        <nav aria-label="Secciones" className="flex gap-2">
+          <a href={RUTAS} className={enlaceBanda}>
+            Rutas
+          </a>
+          <a href={MIS_RESERVAS} className={enlaceBanda}>
+            Mis reservas
+          </a>
+        </nav>
       }
     />
   )
