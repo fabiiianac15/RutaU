@@ -34,7 +34,7 @@ export function MisReservas({ onVolver }: { onVolver: () => void }) {
         texto: `El cupo del bus de las ${r.viaje?.horaSalida} quedó libre para otro estudiante.`,
       })
     } catch (e) {
-      setAviso({ tipo: 'error', titulo: 'No pudimos cancelar', texto: e instanceof ErrorApi ? e.message : 'Intenta de nuevo.' })
+      setAviso({ tipo: 'error', titulo: 'No se pudo cancelar', texto: e instanceof ErrorApi ? e.message : 'Intenta de nuevo.' })
     } finally {
       recargar()
     }
@@ -58,7 +58,7 @@ export function MisReservas({ onVolver }: { onVolver: () => void }) {
           {codigo && (
             <p className="text-sm font-semibold">
               {nombre ? `${nombre} · ` : ''}código {codigo} ·{' '}
-              <button className="underline underline-offset-3" onClick={() => guardarEstudiante(null)}>
+              <button className="-my-3 inline-block py-3 underline underline-offset-3" onClick={() => guardarEstudiante(null)}>
                 Cambiar
               </button>
             </p>
@@ -78,7 +78,7 @@ export function MisReservas({ onVolver }: { onVolver: () => void }) {
 
         {codigo && reservas.estado === 'error' && (
           <div className="flex flex-col gap-3">
-            <Aviso tipo="error" titulo="No pudimos cargar tus reservas">{reservas.mensaje}</Aviso>
+            <Aviso tipo="error" titulo="No se pudieron cargar tus reservas">{reservas.mensaje}</Aviso>
             <Boton tipo="secundario" onClick={recargar}>Intentar de nuevo</Boton>
           </div>
         )}
@@ -306,6 +306,7 @@ function PanelReserva({ reserva, hoy, onCancelar }: { reserva: Reserva; hoy: str
 function PedirCodigo({ onBuscar }: { onBuscar: (codigo: string) => void }) {
   const [codigo, setCodigo] = useState('')
   const [intentado, setIntentado] = useState(false)
+  const [tocado, setTocado] = useState(false)
   const enviar = (e: FormEvent) => {
     e.preventDefault()
     setIntentado(true)
@@ -321,7 +322,8 @@ function PedirCodigo({ onBuscar }: { onBuscar: (codigo: string) => void }) {
         value={codigo}
         onChange={(e) => setCodigo(e.target.value.replace(/\D/g, ''))}
         ayuda="El de tu carné, solo números"
-        error={intentado && !codigoValido(codigo) ? 'Debe tener entre 4 y 12 dígitos' : undefined}
+        onBlur={() => setTocado(true)}
+        error={(intentado || tocado) && !codigoValido(codigo) ? 'Debe tener entre 4 y 12 dígitos' : undefined}
         maxLength={12}
       />
       <Boton type="submit">Ver mis reservas</Boton>

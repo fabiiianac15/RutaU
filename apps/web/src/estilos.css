@@ -125,6 +125,14 @@
   }
 }
 
+/* Con "Aumentar contraste" activado, los grises y las líneas se oscurecen. */
+@media (prefers-contrast: more) {
+  :root {
+    --color-apagada: #3c4043;
+    --color-grilla: #80868b;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

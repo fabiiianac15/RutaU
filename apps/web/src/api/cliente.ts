@@ -20,7 +20,7 @@ async function pedir<T>(url: string, init?: RequestInit): Promise<T> {
   try {
     res = await fetch(url, init)
   } catch {
-    throw new ErrorApi('No pudimos conectarnos. Revisa tu internet e intenta de nuevo.', 0)
+    throw new ErrorApi('Sin conexión. Revisa tu internet e intenta de nuevo.', 0)
   }
   const cuerpo = await res.json().catch(() => null)
   if (!res.ok) {

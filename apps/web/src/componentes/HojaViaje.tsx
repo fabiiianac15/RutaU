@@ -10,6 +10,8 @@ export type Resultado =
   | null
 
 interface Props {
+  // Contraída (solo en el celular): muestra el encabezado del viaje y oculta el resto.
+  compacta?: boolean
   viaje: Viaje
   estado: EstadoViaje
   paradas: Parada[]
@@ -98,7 +100,7 @@ export function HojaViaje(props: Props) {
     cuerpo = (
       <>
         <SelectorParada paradas={paradas} elegida={paradaId} onElegir={setParadaId} />
-        {resultado?.tipo === 'error' && <Aviso tipo="error" titulo="No pudimos reservar">{resultado.mensaje}</Aviso>}
+        {resultado?.tipo === 'error' && <Aviso tipo="error" titulo="No se pudo reservar">{resultado.mensaje}</Aviso>}
         <Boton
           cargando={reservando}
           disabled={!paradaId}
@@ -113,7 +115,7 @@ export function HojaViaje(props: Props) {
         {conocido && (
           <p className="text-sm text-apagada">
             A nombre de {conocido.nombre} · {conocido.codigo}.{' '}
-            <button className="font-semibold text-rojo-oscuro underline underline-offset-3" onClick={() => setPaso('datos')}>
+            <button className="-my-3 inline-block py-3 font-semibold text-rojo-oscuro underline underline-offset-3" onClick={() => setPaso('datos')}>
               No soy yo
             </button>
           </p>
@@ -125,7 +127,7 @@ export function HojaViaje(props: Props) {
   return (
     <div className="flex flex-col gap-4">
       {encabezado}
-      {cuerpo}
+      <div className={`flex flex-col gap-4 ${props.compacta ? 'max-lg:hidden' : ''}`}>{cuerpo}</div>
     </div>
   )
 }
@@ -196,9 +198,11 @@ function FormularioDatos({
   const [codigo, setCodigo] = useState(inicial?.codigo ?? '')
   const [nombre, setNombre] = useState(inicial?.nombre ?? '')
   const [intentado, setIntentado] = useState(false)
+  // Cada campo se valida al salir de él, sin esperar a "Confirmar reserva".
+  const [tocados, setTocados] = useState({ codigo: false, nombre: false })
 
-  const errorCodigo = intentado && !codigoValido(codigo) ? 'Debe tener entre 4 y 12 dígitos' : undefined
-  const errorNombre = intentado && !nombre.trim() ? 'Escribe tu nombre' : undefined
+  const errorCodigo = (intentado || tocados.codigo) && !codigoValido(codigo) ? 'Debe tener entre 4 y 12 dígitos' : undefined
+  const errorNombre = (intentado || tocados.nombre) && !nombre.trim() ? 'Escribe tu nombre' : undefined
 
   const enviar = (ev: FormEvent) => {
     ev.preventDefault()
@@ -215,6 +219,7 @@ function FormularioDatos({
         autoComplete="off"
         value={codigo}
         onChange={(e) => setCodigo(e.target.value.replace(/\D/g, ''))}
+        onBlur={() => setTocados((t) => ({ ...t, codigo: true }))}
         ayuda="El de tu carné, solo números"
         error={errorCodigo}
         maxLength={12}
@@ -224,17 +229,18 @@ function FormularioDatos({
         autoComplete="name"
         value={nombre}
         onChange={(e) => setNombre(e.target.value)}
+        onBlur={() => setTocados((t) => ({ ...t, nombre: true }))}
         ayuda="Así te reconoce el conductor"
         error={errorNombre}
         maxLength={100}
       />
-      {error && <Aviso tipo="error" titulo="No pudimos reservar">{error}</Aviso>}
+      {error && <Aviso tipo="error" titulo="No se pudo reservar">{error}</Aviso>}
       <Boton type="submit" cargando={reservando}>
         Confirmar reserva
       </Boton>
       <p className="text-sm text-apagada">
         Guardamos tu código en este celular para la próxima vez.{' '}
-        <button type="button" className="font-semibold text-rojo-oscuro underline underline-offset-3" onClick={onVolver}>
+        <button type="button" className="-my-3 inline-block py-3 font-semibold text-rojo-oscuro underline underline-offset-3" onClick={onVolver}>
           Cambiar parada
         </button>
       </p>

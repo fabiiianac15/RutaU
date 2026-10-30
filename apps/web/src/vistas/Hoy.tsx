@@ -17,6 +17,8 @@ export function Hoy({ accionBanda, onVerReservas }: { accionBanda?: React.ReactN
   const [elegidoId, setElegidoId] = useState<number | null>(null)
   const [resultado, setResultado] = useState<Resultado>(null)
   const [reservando, setReservando] = useState(false)
+  // En el celular la hoja se puede contraer a su encabezado para ver todo el horario.
+  const [hojaAbierta, setHojaAbierta] = useState(true)
   const [estudiante, guardarEstudiante] = useEstudiante()
 
   const [viajes, recargarViajes] = useViajes(fecha)
@@ -62,6 +64,7 @@ export function Hoy({ accionBanda, onVerReservas }: { accionBanda?: React.ReactN
   const elegir = (v: Viaje) => {
     setElegidoId(v.id)
     setResultado(null)
+    setHojaAbierta(true)
   }
 
   // En el celular, el bloque elegido se desplaza para que la hoja no lo tape
@@ -123,7 +126,7 @@ export function Hoy({ accionBanda, onVerReservas }: { accionBanda?: React.ReactN
           {viajes.estado === 'cargando' && <GrillaCargando />}
           {viajes.estado === 'error' && (
             <div className="flex flex-col gap-3 pt-4">
-              <Aviso tipo="error" titulo="No pudimos cargar los viajes">
+              <Aviso tipo="error" titulo="No se pudieron cargar los viajes">
                 {viajes.mensaje}
               </Aviso>
               <Boton tipo="secundario" onClick={recargarViajes}>
@@ -152,10 +155,19 @@ export function Hoy({ accionBanda, onVerReservas }: { accionBanda?: React.ReactN
             aria-label="Viaje elegido"
             className="hoja fixed inset-x-0 bottom-0 z-10 max-h-[78dvh] overflow-y-auto rounded-t-hoja border-t border-grilla bg-papel px-4 pt-2.5 pb-[max(1.5rem,env(safe-area-inset-bottom))] shadow-[0_-6px_18px_rgb(0_0_0/0.08)] lg:sticky lg:top-6 lg:mt-6 lg:max-h-none lg:rounded-hoja lg:border-0 lg:p-6 lg:shadow-[0_8px_24px_rgb(0_0_0/0.08)]"
           >
-            <span aria-hidden className="mx-auto mb-3 block h-1 w-10 rounded-full bg-grilla lg:hidden" />
+            <button
+              type="button"
+              onClick={() => setHojaAbierta((a) => !a)}
+              aria-expanded={hojaAbierta}
+              aria-label={hojaAbierta ? 'Contraer el detalle del viaje' : 'Mostrar el detalle del viaje'}
+              className="mx-auto -mt-2.5 mb-1 flex h-7 w-16 items-center justify-center lg:hidden"
+            >
+              <span aria-hidden className="block h-1 w-10 rounded-full bg-grilla" />
+            </button>
             {elegido ? (
               <HojaViaje
                 key={elegido.id}
+                compacta={!hojaAbierta}
                 viaje={elegido}
                 estado={estado(elegido)}
                 paradas={paradas}
