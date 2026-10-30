@@ -24,9 +24,13 @@ poner_variable() {
 
 # Despliega a producción e imprime el dominio público del proyecto (*.vercel.app),
 # que no cambia entre despliegues, a diferencia de la URL de cada despliegue.
+# Cada proyecto de Vercel tiene su carpeta como Root Directory, así que se despliega
+# desde la raíz del repo indicando el proyecto con VERCEL_ORG_ID y VERCEL_PROJECT_ID.
 desplegar() {
-  local carpeta=$1 url dominio
-  url=$(cd "$carpeta" && vercel deploy --prod --yes | tail -1)
+  local carpeta=$1 url dominio org proyecto
+  org=$(node -p "require('./$carpeta/.vercel/project.json').orgId")
+  proyecto=$(node -p "require('./$carpeta/.vercel/project.json').projectId")
+  url=$(VERCEL_ORG_ID=$org VERCEL_PROJECT_ID=$proyecto vercel deploy --prod --yes | tail -1)
   dominio=$(cd "$carpeta" && vercel inspect "$url" 2>&1 | grep -oE 'https://[a-z0-9-]+\.vercel\.app' | grep -v -- '-git-' | awk '{ print length, $0 }' | sort -n | head -1 | cut -d' ' -f2)
   echo "${dominio:-$url}"
 }
